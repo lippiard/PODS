@@ -7,9 +7,20 @@ import java.util.List;
 
 public class SimultaneousDecision {
 	
-	private double[][] payoffs;
+	private double[][] rowPayoffs;
+	private double[][] colPayoffs;
 	
-	public SimultaneousDecision(String file) throws FileNotFoundException, IOException {
+	public SimultaneousDecision(String rowFile, String colFile) {
+		try {
+			this.rowPayoffs = getArrayFromFile(rowFile);
+			this.colPayoffs = getArrayFromFile(colFile);
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+	}
+	
+	private static double[][] getArrayFromFile(String file) throws FileNotFoundException, IOException {
+		double[][] payoffs;
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String line = br.readLine();
 		int nlines = 0;
@@ -31,19 +42,30 @@ public class SimultaneousDecision {
 			i++;
 		}
 		br.close();
+		return payoffs;
 	}
 	
 	public void printPayoffs() {
-		for (int i = 0; i < payoffs.length; i++) {
-			for (int j = 0; j < payoffs[i].length; j++) {
-				System.out.print(payoffs[i][j] + " ");
+		for (int k = 1; k < 3; k++) {
+			double [][] payoffs;
+			if (k == 1) {
+				payoffs = rowPayoffs;
+				System.out.println("Row Payoffs: ");
+			} else {
+				payoffs = colPayoffs;
+				System.out.println("Column Payoffs: ");
 			}
-			System.out.println(" ");
+			for (int i = 0; i < payoffs.length; i++) {
+				for (int j = 0; j < payoffs[i].length; j++) {
+					System.out.print(payoffs[i][j] + " ");
+				}
+				System.out.println(" ");
+			}
 		}
 	}
 	
-	public double getPayoff(int rowS, int colS) {
-		return payoffs[rowS][colS];
+	public double[] getPayoff(int rowS, int colS) {
+		return new double[]{rowPayoffs[rowS][colS], colPayoffs[rowS][colS]};
 	}
 
 }
