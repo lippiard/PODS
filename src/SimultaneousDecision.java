@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+//basic decision 
 public class SimultaneousDecision {
 	
 	private double[][] rowPayoffs;
