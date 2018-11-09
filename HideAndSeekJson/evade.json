@@ -1,4 +1,5 @@
-{ "name": "Hide and Seek Evade",
+{ 
+  "name": "Hide and Seek Evade",
   "rowPlayerName": "Hider",
   "colPlayerName": "Seeker",
   "rowPlayerPayoffs": [[0,1,1],
