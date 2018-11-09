@@ -1,0 +1,10 @@
+{ "name": "Hide and Seek Find",
+  "rowPlayerName": "Hider",
+  "colPlayerName": "Seeker",
+  "rowPlayerPayoffs": [[1,0,0],
+                       [0,1,0],
+                       [0,0,1]],
+  "colPlayerPayoffs": [[1,0,0],
+  					   [0,1,0],
+  					   [0,0,1]]
+}
