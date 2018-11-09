@@ -54,22 +54,22 @@ var processChoice = function(req, res) {
 };
 
 var getResults = function(req, res) {
-	var evadePayoffs = sd.get_payoffs('./HideAndSeekJson/evade.json', 
-			choices.round1, choices.round2);
-	var findPayoffs = sd.get_payoffs('./HideAndSeekJson/find.json',
-			choices.round3, choices.round4);
-	var evadeWinner;
-	if (evadePayoffs[0] == 1) {
-		evadeWinner = "Hider";
-	} else if (evadePayoffs[1] == 1) {
-		evadeWinner = "Seeker";
-	}
-	var findWinLoss;
-	if (findPayoffs[1] == 1) {
-		findWinLoss = 'win';
-	} else {
-		findWinLoss = 'lose';
-	}
+//	var evadePayoffs = sd.get_payoffs('./HideAndSeekJson/evade.json', 
+//			choices.round1, choices.round2);
+//	var findPayoffs = sd.get_payoffs('./HideAndSeekJson/find.json',
+//			choices.round3, choices.round4);
+//	var evadeWinner;
+//	if (evadePayoffs[0] == 1) {
+//		evadeWinner = "Hider";
+//	} else if (evadePayoffs[1] == 1) {
+//		evadeWinner = "Seeker";
+//	}
+//	var findWinLoss;
+//	if (findPayoffs[1] == 1) {
+//		findWinLoss = 'win';
+//	} else {
+//		findWinLoss = 'lose';
+//	}
 	
 	//above is not used right now
 	res.render('results.ejs', choices);
