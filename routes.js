@@ -5,33 +5,46 @@ var sd = require('./simuldecision.js');
 
 var choices = {round1: 0, round2: 0, round3: 0, round4: 0};
 
+var getLogin = function(req, res) {
+	res.render('login.ejs');
+};
+
+var postCheckLogin = function(req, res) {
+	req.session.loggedIn = true;
+	res.redirect('/');
+};
+
 var getMain = function(req, res) {
-	var round = req.query.round;
-	var game = null;
-	var player = null;
-	if (round == 1 || round == null) {
-		choices.round1 = 0;
-		choices.round2 = 0;
-		choices.round3 = 0;
-		choices.round4 = 0;
-		game = "Evade";
-		player = "Hider";
-		req.session.round = 1;
-	} else if (round == 2) {
-		game = "Evade";
-		player = "Seeker";
-		req.session.round = 2;
-	} else if (round == 3) {
-		game = "Find";
-		player = "Hider";
-		req.session.round = 3;
-	} else if (round == 4) {
-		game = "Find";
-		player = "Seeker";
-		req.session.round = 4;
+	if (!req.session.loggedIn) {
+		res.redirect('/login');
+	} else {
+		var round = req.query.round;
+		var game = null;
+		var player = null;
+		if (round == 1 || round == null) {
+			choices.round1 = 0;
+			choices.round2 = 0;
+			choices.round3 = 0;
+			choices.round4 = 0;
+			game = "Evade";
+			player = "Hider";
+			req.session.round = 1;
+		} else if (round == 2) {
+			game = "Evade";
+			player = "Seeker";
+			req.session.round = 2;
+		} else if (round == 3) {
+			game = "Find";
+			player = "Hider";
+			req.session.round = 3;
+		} else if (round == 4) {
+			game = "Find";
+			player = "Seeker";
+			req.session.round = 4;
+		}
+		res.render('main.ejs', {game: game, player: player});
 	}
-	res.render('main.ejs', {game: game, player: player});
-}
+};
 	
 var processChoice = function(req, res) {
 	var thischoice = req.body.choice;
@@ -80,7 +93,9 @@ var getResults = function(req, res) {
 var routes = {
 	get_main: getMain,
 	process_choice: processChoice,
-	get_results: getResults
+	get_results: getResults,
+	get_login: getLogin,
+	post_check_login: postCheckLogin
 };
 
 module.exports = routes;
