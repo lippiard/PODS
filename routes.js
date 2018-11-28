@@ -14,6 +14,14 @@ var postCheckLogin = function(req, res) {
 	res.redirect('/');
 };
 
+var getHome = function(req, res) {
+	if (!req.session.loggedIn) {
+		res.redirect('/login');
+	} else {
+		res.render('home.ejs');
+	}
+};
+
 var getMain = function(req, res) {
 	if (!req.session.loggedIn) {
 		res.redirect('/login');
@@ -95,7 +103,8 @@ var routes = {
 	process_choice: processChoice,
 	get_results: getResults,
 	get_login: getLogin,
-	post_check_login: postCheckLogin
+	post_check_login: postCheckLogin,
+	get_home: getHome
 };
 
 module.exports = routes;
