@@ -34,6 +34,8 @@ app.post('/processchoice', routes.process_choice);
 app.get('/results', routes.get_results);
 app.get('/login', routes.get_login);
 app.post('/checklogin', routes.post_check_login);
+app.post('/getuserprofile', routes.post_get_user_profile);
+app.get('/profile', routes.get_profile);
 
 app.listen(8080);
 console.log('Server running on port 8080. Go to http://localhost:8080/')

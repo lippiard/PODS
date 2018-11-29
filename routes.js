@@ -22,6 +22,16 @@ var getHome = function(req, res) {
 	}
 };
 
+var postGetUserProfile = function(req, res) {
+	//user id will come through post
+	//get user data from db and send to res to populate profile page
+	res.redirect('/profile');
+};
+
+var getProfile = function (req, res) {
+	res.render('profile.ejs');
+};
+
 var getMain = function(req, res) {
 	if (!req.session.loggedIn) {
 		res.redirect('/login');
@@ -104,7 +114,9 @@ var routes = {
 	get_results: getResults,
 	get_login: getLogin,
 	post_check_login: postCheckLogin,
-	get_home: getHome
+	get_home: getHome,
+	post_get_user_profile: postGetUserProfile,
+	get_profile: getProfile
 };
 
 module.exports = routes;
