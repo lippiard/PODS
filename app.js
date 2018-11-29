@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //    keys: ['secret1', 'secret2']
 //}));
 app.use(express.static(__dirname + '/img/')); // for getting images from local files
+app.use(express.static(__dirname + '/views/')); // for loading ejs parts into other ejs
 app.use(session({
 	secret: 'secret',
 	resave: false,
