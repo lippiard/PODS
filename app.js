@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //}));
 app.use(express.static(__dirname + '/img/')); // for getting images from local files
 app.use(express.static(__dirname + '/views/')); // for loading ejs parts into other ejs
+app.use(express.static(__dirname + '/node_modules/ejs/')); //for importing ejs into html
 app.use(session({
 	secret: 'secret',
 	resave: false,
@@ -34,8 +35,9 @@ app.post('/processchoice', routes.process_choice);
 app.get('/results', routes.get_results);
 app.get('/login', routes.get_login);
 app.post('/checklogin', routes.post_check_login);
-app.post('/getuserprofile', routes.post_get_user_profile);
 app.get('/profile', routes.get_profile);
+app.get('/create', routes.get_create);
+app.get('/pod', routes.get_pod);
 
 app.listen(8080);
 console.log('Server running on port 8080. Go to http://localhost:8080/')

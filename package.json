@@ -8,7 +8,7 @@
 	"dependencies": {
 		"async": "*",
 		"body-parser": "*",
-		"ejs": "*",
+		"ejs": "^2.6.1",
 		"express": "*",
 		"express-session": "*",
 		"fs": "*",

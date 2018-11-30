@@ -15,21 +15,37 @@ var postCheckLogin = function(req, res) {
 };
 
 var getHome = function(req, res) {
+	//redirect to login if not logged in
 	if (!req.session.loggedIn) {
 		res.redirect('/login');
 	} else {
-		res.render('home.ejs');
+		//get all game sessions from database, send array to home.ejs
+		sessions = [
+			["1", {"type": "Hide and Seek", "private": "Yes", "creator": "Steve"}],
+			["2", {"type": "Evacuation", "private": "No", "creator": "Steve"}]
+		];
+		
+		res.render('home.ejs', {sessions: sessions});
 	}
-};
-
-var postGetUserProfile = function(req, res) {
-	//user id will come through post
-	//get user data from db and send to res to populate profile page
-	res.redirect('/profile');
 };
 
 var getProfile = function (req, res) {
 	res.render('profile.ejs');
+};
+
+var getCreate = function(req, res) {
+	res.render('create.ejs');
+};
+
+var getPod = function(req, res) {
+	//get sid of clicked on gamesession
+	//keep track of sid in session variable
+	if (req.query.sid) {
+		req.session.currentSID = req.query.sid;
+		res.redirect('/pod');
+	} else {
+		res.render('pod.ejs', {sid: req.session.currentSID});
+	}
 };
 
 var getMain = function(req, res) {
@@ -115,8 +131,9 @@ var routes = {
 	get_login: getLogin,
 	post_check_login: postCheckLogin,
 	get_home: getHome,
-	post_get_user_profile: postGetUserProfile,
-	get_profile: getProfile
+	get_profile: getProfile,
+	get_create: getCreate,
+	get_pod: getPod
 };
 
 module.exports = routes;
