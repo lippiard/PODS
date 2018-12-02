@@ -7,7 +7,11 @@ var ejs = require('ejs');
 var choices = {round1: 0, round2: 0, round3: 0, round4: 0};
 
 var getLogin = function(req, res) {
-	res.render('login.ejs');
+	if (!req.session.loggedIn) {
+		res.render('login.ejs');
+	} else {
+		res.redirect('/');
+	}
 };
 
 var postCheckLogin = function(req, res) {
