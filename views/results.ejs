@@ -2,16 +2,16 @@
 <html>
 <body>
   <h1>Evade</h1>
-  Hider chose box <%= round1 %>, seeker chose box <%= round2 %>.<br>
-  <%if (round1 != round2) { %>
+  Hider chose box <%= choices.round1 %>, seeker chose box <%= choices.round2 %>.<br>
+  <%if (choices.round1 != choices.round2) { %>
     Hider wins!
   <% } else { %>
     Seeker wins!
   <% } %>
   <br>
   <h1>Find</h1>
-  Hider chose box <%= round3 %>, seeker chose box <%= round4 %>.<br>
-  <%if (round3 == round4) { %>
+  Hider chose box <%= choices.round3 %>, seeker chose box <%= choices.round4 %>.<br>
+  <%if (choices.round3 == choices.round4) { %>
     You both win!
   <% } else { %>
     You both lose!

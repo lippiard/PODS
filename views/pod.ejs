@@ -14,6 +14,10 @@
   </div>
   <h1>This is the POD page. The ID of this game session is <%= sid %></h1>
 
+ <div id="content">
+	<%- include(page, {}); %>
+  </div>
+
   <script>
     jQuery(document).ready(function($) {
       $("#nav-placeholder").load("nav.ejs", function() {

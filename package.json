@@ -11,7 +11,7 @@
 		"body-parser": "*",
 		"ejs": "^2.6.1",
 		"express": "*",
-		"express-session": "*",
+		"express-session": "^1.15.6",
 		"fs": "*",
 		"jquery": "^3.3.1",
 		"vogels": "*"

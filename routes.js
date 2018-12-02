@@ -29,7 +29,7 @@ var getHome = function(req, res) {
 			["1", {"type": "Hide and Seek", "private": "Yes", "creator": "Steve"}],
 			["2", {"type": "Evacuation", "private": "No", "creator": "Steve"}]
 		];
-		
+		req.session.round = 1;
 		res.render('home.ejs', {sessions: sessions});
 	}
 };
@@ -48,8 +48,40 @@ var getPod = function(req, res) {
 	if (req.query.sid) {
 		req.session.currentSID = req.query.sid;
 		res.redirect('/pod');
+	} else if (req.session.round) {
+		console.log(req.session.round);
+		var round = req.session.round;
+		var game = null;
+		var player = null;
+		var page = 'main';
+		if (round == 1 || round == null) {
+			choices.round1 = 0;
+			choices.round2 = 0;
+			choices.round3 = 0;
+			choices.round4 = 0;
+			game = "Evade";
+			player = "Hider";
+			req.session.round = 1;
+		} else if (round == 2) {
+			game = "Evade";
+			player = "Seeker";
+			req.session.round = 2;
+		} else if (round == 3) {
+			game = "Find";
+			player = "Hider";
+			req.session.round = 3;
+		} else if (round == 4) {
+			game = "Find";
+			player = "Seeker";
+			req.session.round = 4;
+		} else if (round == 5) {
+			page = 'results';
+		}
+		res.render('pod.ejs', {sid: req.session.currentSID, 
+			game: game, player: player, page: page, choices: choices});
 	} else {
-		res.render('pod.ejs', {sid: req.session.currentSID});
+		req.session.round = 1;
+		res.redirect('/pod');
 	}
 };
 
@@ -65,7 +97,7 @@ var getMain = function(req, res) {
 	if (!req.session.loggedIn) {
 		res.redirect('/login');
 	} else {
-		var round = req.query.round;
+		var round = req.session.round;
 		var game = null;
 		var player = null;
 		if (round == 1 || round == null) {
@@ -98,16 +130,20 @@ var processChoice = function(req, res) {
 	var round = req.session.round;
 	if (round == 1 || round == null) {
 		choices['round'+round] = thischoice;
-		res.redirect("/?round=2");
+		req.session.round = 2;
+		res.redirect("/pod");
 	} else if (round == 2) {
+		req.session.round = 3;
 		choices['round'+round] = thischoice;
-		res.redirect("/?round=3");
+		res.redirect("/pod");
 	} else if (round == 3) {
+		req.session.round = 4; 
 		choices['round'+round] = thischoice;
-		res.redirect("/?round=4");
+		res.redirect("/pod");
 	} else if (round == 4) {
+		req.session.round = 5;
 		choices['round'+round] = thischoice;
-		res.redirect("/results");
+		res.redirect("/pod");
 	} else {
 		res.redirect("/");
 	}
