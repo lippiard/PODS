@@ -49,6 +49,14 @@ var getPod = function(req, res) {
 	}
 };
 
+var postGetSessions = function(req, res) {
+	sessions = [
+		["1", {"type": "Hide and Seek", "private": "Yes", "creator": "Steve"}],
+		["2", {"type": "Evacuation", "private": "No", "creator": "Steve"}]
+	];
+	res.send({sessions: sessions});
+};
+
 var getMain = function(req, res) {
 	if (!req.session.loggedIn) {
 		res.redirect('/login');
@@ -134,7 +142,8 @@ var routes = {
 	get_home: getHome,
 	get_profile: getProfile,
 	get_create: getCreate,
-	get_pod: getPod
+	get_pod: getPod,
+	post_get_sessions: postGetSessions
 };
 
 module.exports = routes;

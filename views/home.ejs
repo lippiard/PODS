@@ -17,8 +17,7 @@
   <div id="nav-placeholder">
   </div>
   
-  <div id="content-container">
-    <% include table %>
+  <div id="content">
   </div>
 
   <script>
@@ -31,6 +30,10 @@
       $("#nav-placeholder").load("nav.ejs", function() {
         $(".nav").find(".active").removeClass("active");
         $("#homelink").addClass("active");
+      });
+      
+      $.post("/getsessions", function(data) {
+        $("#content").html(ejs.renderFile("table.ejs", {sessions: data.sessions});
       });
       
     });
