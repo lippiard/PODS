@@ -32,9 +32,10 @@
         $("#homelink").addClass("active");
       });
       
-      $.post("/getsessions", function(data) {
-        $("#content").html(ejs.renderFile("table.ejs", {sessions: data.sessions});
-      });
+      //$.post("/getsessions", function(data) {
+        //$("#content").html(ejs.renderFile("table.ejs", {sessions: data.sessions}));
+      //});
+      $("#content").html("<% include table %>");
       
     });
   </script>
