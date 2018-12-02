@@ -26,7 +26,7 @@ var getHome = function(req, res) {
 			["2", {"type": "Evacuation", "private": "No", "creator": "Steve"}]
 		];
 		
-		res.render('home.ejs', {sessions: sessions, ejs: ejs});
+		res.render('home.ejs', {sessions: sessions});
 	}
 };
 
@@ -49,12 +49,12 @@ var getPod = function(req, res) {
 	}
 };
 
-var postGetSessions = function(req, res) {
+var getSessions = function(req, res) {
 	sessions = [
 		["1", {"type": "Hide and Seek", "private": "Yes", "creator": "Steve"}],
 		["2", {"type": "Evacuation", "private": "No", "creator": "Steve"}]
 	];
-	res.send({sessions: sessions});
+	res.send(JSON.stringify({sessions: sessions}));
 };
 
 var getMain = function(req, res) {
@@ -143,7 +143,7 @@ var routes = {
 	get_profile: getProfile,
 	get_create: getCreate,
 	get_pod: getPod,
-	post_get_sessions: postGetSessions
+	get_sessions: getSessions
 };
 
 module.exports = routes;

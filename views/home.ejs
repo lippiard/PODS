@@ -18,6 +18,7 @@
   </div>
   
   <div id="content">
+    <% include table %>
   </div>
 
   <script>
@@ -31,11 +32,6 @@
         $(".nav").find(".active").removeClass("active");
         $("#homelink").addClass("active");
       });
-      
-      //$.post("/getsessions", function(data) {
-        //$("#content").html(ejs.renderFile("table.ejs", {sessions: data.sessions}));
-      //});
-      $("#content").html("<% include table %>");
       
     });
   </script>
