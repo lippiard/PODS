@@ -2,6 +2,7 @@
  * 
  */
 var sd = require('./simuldecision.js');
+var ejs = require('ejs');
 
 var choices = {round1: 0, round2: 0, round3: 0, round4: 0};
 
@@ -25,7 +26,7 @@ var getHome = function(req, res) {
 			["2", {"type": "Evacuation", "private": "No", "creator": "Steve"}]
 		];
 		
-		res.render('home.ejs', {sessions: sessions});
+		res.render('home.ejs', {sessions: sessions, ejs: ejs});
 	}
 };
 
