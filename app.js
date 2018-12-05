@@ -37,8 +37,44 @@ app.get('/pod', routes.get_pod);
 app.get('/getsessions', routes.get_sessions);
 app.get('/main', routes.get_main);
 
+
+var queue = []; //list of sockets waiting to be matched
+
+//add socket to queue or pair with socket already in queue
+var pairSockets = function(socket, sid, username) {
+	if (queue.length > 0) {
+		var waitingSocket = queue.pop();
+		var room = sid+'#'+waitingSocket.id+'#'+socket.id;
+		waitingSocket.join(room);
+		socket.join(room);
+		var rnd = Math.random();
+		var role1;
+		var role2;
+		if (rnd < 0.5) {
+			role1 = 'hider';
+			role2 = 'seeker';
+		} else {
+			role1 = 'seeker';
+			role2 = 'hider';
+		}
+		waitingSocket.emit('start game', {role: role1, room: room});
+		socket.emit('start game', {role: role2, room: room});
+	} else {
+		queue.push(socket);
+	}
+};
+
 io.on('connection', function(socket) {
-	console.log('a user connected');
+	console.log('user '+socket.id+' connected');
+	
+	socket.on('join session chat room', function (data) {
+		socket.join(data.sid);
+	});
+	
+	socket.on('find game room', function(data) {
+		pairSockets(socket, data.sid, data.username);
+	});
+	
 });
 
 http.listen(8080, function() {

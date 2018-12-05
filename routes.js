@@ -16,6 +16,7 @@ var getLogin = function(req, res) {
 
 var postCheckLogin = function(req, res) {
 	req.session.loggedIn = true;
+	req.session.username = req.body.usernameInput;
 	res.redirect('/');
 };
 

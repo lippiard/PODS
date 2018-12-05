@@ -38,7 +38,17 @@
     
     var socket = io(); //this is just testing right now - remove/edit later
     var sid = "<%= sid %>"; 
-    socket.join(sid); //join a room named for this game session id (for the purposes of chatting, maybe can be used for matchmaking
+    socket.emit('join session chat room', {sid: sid}); //join chat for everyone in session
+    socket.emit('find game room', {sid:sid}); //find game room (pair with one other use in session)
+    
+    var role;
+    var gameroom;
+    socket.on('start game', function(data) {
+      //console.log('two users have connected in room '+data.room);
+      role = data.role;
+      gameroom = data.room;
+    });
+    
   </script> 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
