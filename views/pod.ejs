@@ -36,7 +36,7 @@
       }
     });
     
-    var socket = io(); //this is just testing right now - remove/edit later
+    var socket = io();
     var sid = "<%= sid %>"; 
     socket.emit('join session chat room', {sid: sid}); //join chat for everyone in session
     socket.emit('find game room', {sid:sid}); //find game room (pair with one other use in session)
