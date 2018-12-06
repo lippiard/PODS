@@ -1,19 +1,23 @@
-<!DOCTYPE html>
-<html>
-<body>
-  <h1>PODS</h1>
   <img src="hns.jpg" alt="alt text" />
-  <br>
-  <%= game %>
-  <br>
-  <%= player%>
-  <br>
-  <form action="/processchoice" method="post">
+  <div id="playscreen">
+  <div id="gamename">
+    <%= game %>
+  </div>
+  <div id="playername">
+    <%= player%>
+  </div>
+  <!-- <form action="/processchoice" method="post"> -->
+  <form action="" method="" onSubmit="return false;">
     <input type="radio" name="choice" value="1"> Box 1<br>
     <input type="radio" name="choice" value="2"> Box 2<br>
     <input type="radio" name="choice" value="3"> Box 3<br>
     <input type="radio" name="choice" value="4"> Box 4<br>
-    <input type="submit" value="Submit">
+    <input type="submit" value="Submit" onclick="formSubmit()">
   </form>
-</body>
-</html>
+  </div>
+  <div id="waitingscreen">
+    Waiting on the other player...
+  </div>
+  <div id="matchingscreen">
+    Matching you with another player...
+  </div>

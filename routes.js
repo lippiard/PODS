@@ -5,7 +5,8 @@ var sd = require('./simuldecision.js');
 var ejs = require('ejs');
 var fs = require('fs');
 
-var fileName = '../git/HideAndSeekJson/data.json';
+//var fileName = '../git/HideAndSeekJson/data.json';
+var fileName = './HideAndSeekJson/data.json';
 var file = require(fileName);
 
 var choices = {round1: 0, round2: 0, round3: 0, round4: 0};

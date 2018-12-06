@@ -15,8 +15,8 @@
   </div>
   <h1>This is the POD page. The ID of this game session is <%= sid %></h1>
 
- <div id="content">
-	<%- include(page, {}); %>
+  <div id="content">
+	<%- include(page, {game: game, player: player, choices: choices}); %>
   </div>
 
   <script>
@@ -25,6 +25,27 @@
         $(".nav").find(".active").removeClass("active");
       });
       
+      $("#matchingscreen").show();
+      $("#playscreen").hide();
+      $("#waitingscreen").hide();
+      
+    });
+    
+    var socket = io();
+    
+    var gameroom;
+    var role;
+    socket.on('start game', function(data) {
+      role = data.role;
+      gameroom = data.room;
+      if (role === "Hider") {
+        $("#playscreen").show();
+        $("#waitingscreen").hide();
+      } else {
+        $("#playscreen").hide();
+        $("#waitingscreen").show();
+      }
+      $("#matchingscreen").hide();
     });
     
     window.addEventListener( "pageshow", function ( event ) {
@@ -36,17 +57,23 @@
       }
     });
     
-    var socket = io();
     var sid = "<%= sid %>"; 
     socket.emit('join session chat room', {sid: sid}); //join chat for everyone in session
-    socket.emit('find game room', {sid:sid}); //find game room (pair with one other use in session)
+    socket.emit('find game room', {sid:sid}); //find game room (pair with one other user in session)
     
-    var role;
-    var gameroom;
-    socket.on('start game', function(data) {
-      //console.log('two users have connected in room '+data.room);
-      role = data.role;
-      gameroom = data.room;
+    var formSubmit = function() {
+      var choice = $("input[name='choice']:checked").val();
+      $("input[name='choice']:checked").prop('checked', false); //unselect selected radio button (to reset for next round)
+      $.post('/processchoice', {choice: choice});
+      $('#playscreen').hide();
+      $('#waitingscreen').show();
+      var player = "<%= player %>"
+      socket.emit('made choice', {player: player, room: gameroom});
+    };
+    
+    socket.on('your turn', function() {
+      $('#playscreen').show();
+      $('#waitingscreen').hide();	
     });
     
   </script> 

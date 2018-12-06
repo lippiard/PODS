@@ -51,11 +51,11 @@ var pairSockets = function(socket, sid, username) {
 		var role1;
 		var role2;
 		if (rnd < 0.5) {
-			role1 = 'hider';
-			role2 = 'seeker';
+			role1 = 'Hider';
+			role2 = 'Seeker';
 		} else {
-			role1 = 'seeker';
-			role2 = 'hider';
+			role1 = 'Seeker';
+			role2 = 'Hider';
 		}
 		waitingSocket.emit('start game', {role: role1, room: room});
 		socket.emit('start game', {role: role2, room: room});
@@ -74,6 +74,10 @@ io.on('connection', function(socket) {
 	socket.on('find game room', function(data) {
 		pairSockets(socket, data.sid, data.username);
 	});
+	
+	socket.on('made choice', function(data) {
+		socket.to(data.room).emit('your turn');
+	})
 	
 });
 
