@@ -3,7 +3,7 @@
  */
 var fs = require('fs');
 var Plotly = require('plotly')("team19", "GXzpEzKKfMsqioq0V6K6")
-console.log(Plotly);
+//console.log(Plotly);
 
 //evade selections
 var selections = JSON.parse(fs.readFileSync('./evadeSelections.json', 'utf8'));
@@ -11,14 +11,14 @@ var total =  selections.count1 + selections.count2 + selections.count3 + selecti
 var eselPercents = [selections.count1/total, selections.count2/total, selections.count3/total,
 	selections.count4/total];
 
-console.log(eselPercents);
+//console.log(eselPercents);
 
 //evade scores
 var selections = JSON.parse(fs.readFileSync('./evadeScores.json', 'utf8'));
 var escPercents = [selections.score1, selections.score2, selections.score3,
 	selections.score4];
 
-console.log(escPercents);
+//console.log(escPercents);
 
 //find selections
 var selections = JSON.parse(fs.readFileSync('./findSelections.json', 'utf8'));
@@ -26,34 +26,54 @@ var total =  selections.count1 + selections.count2 + selections.count3 + selecti
 var fselPercents = [selections.count1/total, selections.count2/total, selections.count3/total,
 	selections.count4/total];
 
-console.log(fselPercents);
+//console.log(fselPercents);
 
 //find scores
 var selections = JSON.parse(fs.readFileSync('./findScores.json', 'utf8'));
 var fscPercents = [selections.score1, selections.score2, selections.score3,
 	selections.score4];
 
-console.log(fscPercents);
+//console.log(fscPercents);
 
 var data = [{
-	  x: ['1', '2', '3', '4'],
+	  x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
 	  y: eselPercents,
 	  type: 'bar'
 	}];
 
+	var layout = {
+		  title: "Evade Selections",
+		  xaxis: {
+		    title: "Box Picked",
+		  },
+		  yaxis: {
+		    title: "Frequency",
+		  }
+		};
 
-	var graphOptions = {filename: "basic-bar", fileopt: "overwrite"};
-	Plotly.plot(data, graphOptions, function (err, msg) {console.log(msg)});
+
+	var graphOptions = {layout: layout, filename: "basic-bar", fileopt: "new"};
+	Plotly.plot(data, graphOptions, function (err, msg) {console.log(msg.url)});
 	
 	var data2 = [{
 		  x: ['1', '2', '3', '4'],
 		  y: fselPercents,
 		  type: 'bar'
 		}];
+	
+	var layout = {
+			  title: "Find Selections",
+			  xaxis: {
+			    title: "Box Picked",
+			  },
+			  yaxis: {
+			    title: "Frequency",
+			  }
+			};
 
 
-		var graphOptions = {filename: "basic-bar", fileopt: "new"};
-		Plotly.plot(data2, graphOptions, function (err, msg) {console.log(msg)});
+		var graphOptions = {layout: layout, filename: "basic-bar", fileopt: "new"};
+		Plotly.plot(data2, graphOptions, function (err, msg) {console.log(msg.url)});
 
 	var data3 = [{
 			  x: ['1', '2', '3', '4'],
@@ -61,9 +81,18 @@ var data = [{
 			  type: 'bar'
 			}];
 
+	var layout = {
+			  title: "Evade Scores",
+			  xaxis: {
+			    title: "Box Picked",
+			  },
+			  yaxis: {
+			    title: "Number of Wins",
+			  }
+			};
 
-		var graphOptions = {filename: "basic-bar", fileopt: "new"};
-			Plotly.plot(data3, graphOptions, function (err, msg) {console.log(msg)});
+		var graphOptions = {layout:layout, filename: "basic-bar", fileopt: "new"};
+			Plotly.plot(data3, graphOptions, function (err, msg) {console.log(msg.url)});
 			
 	var data4 = [{
 				  x: ['1', '2', '3', '4'],
@@ -71,6 +100,15 @@ var data = [{
 				  type: 'bar'
 				}];
 
+	var layout = {
+			  title: "Find Scores",
+			  xaxis: {
+			    title: "Box Picked",
+			  },
+			  yaxis: {
+			    title: "Number of Wins",
+			  }
+			};
 
-		var graphOptions = {filename: "basic-bar", fileopt: "new"};
-				Plotly.plot(data4, graphOptions, function (err, msg) {console.log(msg)});
+		var graphOptions = {layout: layout, filename: "basic-bar", fileopt: "new"};
+				Plotly.plot(data4, graphOptions, function (err, msg) {console.log(msg.url)});

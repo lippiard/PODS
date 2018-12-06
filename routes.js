@@ -3,6 +3,10 @@
  */
 var sd = require('./simuldecision.js');
 var ejs = require('ejs');
+var fs = require('fs');
+
+var fileName = '../git/HideAndSeekJson/data.json';
+var file = require(fileName);
 
 var choices = {round1: 0, round2: 0, round3: 0, round4: 0};
 
@@ -77,6 +81,30 @@ var getPod = function(req, res) {
 			req.session.round = 4;
 		} else if (round == 5) {
 			page = 'results';
+			
+			file.evadeHiderCount[choices.round1-1] = file.evadeHiderCount[choices.round1-1] + 1;
+			file.evadeSeekerCount[choices.round2-1] = file.evadeSeekerCount[choices.round2-1] + 1;
+			file.findHiderCount[choices.round3-1] = file.findHiderCount[choices.round3-1] + 1;
+			file.findSeekerCount[choices.round3-1] = file.findSeekerCount[choices.round3-1] + 1;
+			
+			if (choices.round1 == choices.round2) {
+				file.evadeSeekerScore[choices.round2-1] = file.evadeSeekerScore[choices.round2-1] +1;
+			} else {
+				file.evadeHiderScore[choices.round1-1] = file.evadeHiderScore[choices.round1-1] +1;
+			}
+			
+			if (choices.round3 == choices.round4) {
+				file.findSeekerScore[choices.round3-1] = file.evadeSeekerScore[choices.round3-1] +1;
+				file.findHiderScore[choices.round3-1] = file.evadeHiderScore[choices.round3-1] +1;
+			} 
+			
+			file.totalGamesPlayed = file.totalGamesPlayed + 1;
+			
+			fs.writeFile(fileName, JSON.stringify(file), function (err) {
+			  if (err) return console.log(err);
+			  console.log(JSON.stringify(file));
+			  console.log('writing to ' + fileName);
+			});
 		}
 		res.render('pod.ejs', {sid: req.session.currentSID, 
 			game: game, player: player, page: page, choices: choices});
