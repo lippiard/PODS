@@ -2,113 +2,147 @@
  * http://usejsdoc.org/
  */
 var fs = require('fs');
-var Plotly = require('plotly')("team19", "GXzpEzKKfMsqioq0V6K6")
+var plotly = require('plotly')("team19", "GXzpEzKKfMsqioq0V6K6")
 //console.log(Plotly);
 
-//evade selections
-var selections = JSON.parse(fs.readFileSync('./evadeSelections.json', 'utf8'));
-var total =  selections.count1 + selections.count2 + selections.count3 + selections.count4;
-var eselPercents = [selections.count1/total, selections.count2/total, selections.count3/total,
-	selections.count4/total];
+var data = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
 
-//console.log(eselPercents);
+var total =  data.totalGamesPlayed;
+
+//evade hider counts
+var evadeHiderCountPercents = data.evadeHiderCount.map(function(element) {
+	return element/total;
+});
+
+//evade seeker counts
+var evadeSeekerCountPercents = data.evadeSeekerCount.map(function(element) {
+	return element/total;
+});
 
 //evade scores
-var selections = JSON.parse(fs.readFileSync('./evadeScores.json', 'utf8'));
-var escPercents = [selections.score1, selections.score2, selections.score3,
-	selections.score4];
+var evadeHiderScorePercents = data.evadeHiderScore.map(function(element) {
+	return element/total;
+});
+var evadeSeekerScorePercents = data.evadeSeekerScore.map(function(element) {
+	return element/total;
+});
 
-//console.log(escPercents);
 
-//find selections
-var selections = JSON.parse(fs.readFileSync('./findSelections.json', 'utf8'));
-var total =  selections.count1 + selections.count2 + selections.count3 + selections.count4;
-var fselPercents = [selections.count1/total, selections.count2/total, selections.count3/total,
-	selections.count4/total];
+//find hider counts
+var findHiderCountPercents = data.findHiderCount.map(function(element) {
+	return element/total;
+});
 
-//console.log(fselPercents);
+//evade seeker counts
+var findSeekerCountPercents = data.findSeekerCount.map(function(element) {
+	return element/total;
+});
 
 //find scores
-var selections = JSON.parse(fs.readFileSync('./findScores.json', 'utf8'));
-var fscPercents = [selections.score1, selections.score2, selections.score3,
-	selections.score4];
+var findHiderScorePercents = data.findHiderScore.map(function(element) {
+	return element/total;
+});
+var findSeekerScorePercents = data.findSeekerScore.map(function(element) {
+	return element/total;
+});
 
-//console.log(fscPercents);
-
-var data = [{
+var trace1 = {
 	  x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
-	  y: eselPercents,
-	  type: 'bar'
-	}];
-
-	var layout = {
-		  title: "Evade Selections",
-		  xaxis: {
-		    title: "Box Picked",
-		  },
-		  yaxis: {
-		    title: "Frequency",
-		  }
+	  y: evadeHiderCountPercents,
+	  name: "Hider",
+	  type: "bar"
 		};
-
-
-	var graphOptions = {layout: layout, filename: "basic-bar", fileopt: "new"};
-	Plotly.plot(data, graphOptions, function (err, msg) {console.log(msg.url)});
-	
-	var data2 = [{
-		  x: ['1', '2', '3', '4'],
-		  y: fselPercents,
-		  type: 'bar'
-		}];
-	
-	var layout = {
-			  title: "Find Selections",
-			  xaxis: {
+var trace2 = {
+		x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
+		y: evadeSeekerCountPercents,
+		name: "Seeker",
+		type: "bar"
+};
+var data = [trace1, trace2];
+var layout = {barmode: "group", title: "Evade Selections",
+		  xaxis: {
 			    title: "Box Picked",
 			  },
 			  yaxis: {
 			    title: "Frequency",
-			  }
+			  }};
+var graphOptions = {layout: layout, filename: "grouped-bar", fileopt: "new"};
+plotly.plot(data, graphOptions, function (err, msg) {
+   console.log(msg.url);
+});
+
+var trace1 = {
+		  x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
+		  y: findHiderCountPercents,
+		  name: "Hider",
+		  type: "bar"
 			};
-
-
-		var graphOptions = {layout: layout, filename: "basic-bar", fileopt: "new"};
-		Plotly.plot(data2, graphOptions, function (err, msg) {console.log(msg.url)});
-
-	var data3 = [{
-			  x: ['1', '2', '3', '4'],
-			  y: escPercents,
-			  type: 'bar'
-			}];
-
-	var layout = {
-			  title: "Evade Scores",
+	var trace2 = {
+			x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
+			y: findSeekerCountPercents,
+			name: "Seeker",
+			type: "bar"
+	};
+	var data = [trace1, trace2];
+	var layout = {barmode: "group", title: "Find Selections",
 			  xaxis: {
-			    title: "Box Picked",
-			  },
-			  yaxis: {
-			    title: "Number of Wins",
-			  }
+				    title: "Box Picked",
+				  },
+				  yaxis: {
+				    title: "Frequency",
+				  }};
+	var graphOptions = {layout: layout, filename: "grouped-bar", fileopt: "new"};
+	plotly.plot(data, graphOptions, function (err, msg) {
+	   console.log(msg.url);
+	});
+	
+	
+	var trace1 = {
+			  x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
+			  y: evadeHiderScorePercents,
+			  name: "Hider",
+			  type: "bar"
+				};
+		var trace2 = {
+				x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
+				y: evadeSeekerScorePercents,
+				name: "Seeker",
+				type: "bar"
+		};
+		var data = [trace1, trace2];
+		var layout = {barmode: "group", title: "Evade Wins",
+				  xaxis: {
+					    title: "Box Picked",
+					  },
+					  yaxis: {
+					    title: "Evade Win Percentage",
+					  }};
+		var graphOptions = {layout: layout, filename: "grouped-bar", fileopt: "new"};
+		plotly.plot(data, graphOptions, function (err, msg) {
+		   console.log(msg.url);
+		});
+		
+		var trace1 = {
+				  x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
+				  y: findHiderScorePercents,
+				  name: "Hider",
+				  type: "bar"
+					};
+			var trace2 = {
+					x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
+					y: findSeekerScorePercents,
+					name: "Seeker",
+					type: "bar"
 			};
-
-		var graphOptions = {layout:layout, filename: "basic-bar", fileopt: "new"};
-			Plotly.plot(data3, graphOptions, function (err, msg) {console.log(msg.url)});
-			
-	var data4 = [{
-				  x: ['1', '2', '3', '4'],
-				  y: fscPercents,
-				  type: 'bar'
-				}];
-
-	var layout = {
-			  title: "Find Scores",
-			  xaxis: {
-			    title: "Box Picked",
-			  },
-			  yaxis: {
-			    title: "Number of Wins",
-			  }
-			};
-
-		var graphOptions = {layout: layout, filename: "basic-bar", fileopt: "new"};
-				Plotly.plot(data4, graphOptions, function (err, msg) {console.log(msg.url)});
+			var data = [trace1, trace2];
+			var layout = {barmode: "group", title: "Find Win Percentage",
+					  xaxis: {
+						    title: "Box Picked",
+						  },
+						  yaxis: {
+						    title: "Frequency",
+						  }};
+			var graphOptions = {layout: layout, filename: "grouped-bar", fileopt: "new"};
+			plotly.plot(data, graphOptions, function (err, msg) {
+			   console.log(msg.url);
+			});
