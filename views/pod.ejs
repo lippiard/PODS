@@ -20,7 +20,7 @@
   </div>
   
   <div id="resultsscreen">
-    <% -include("results", {}); %>
+    <%- include("results", {}); %>
   </div>
 
   <script>
@@ -55,6 +55,8 @@
         $("#waitingscreen").show();
       }
       $("#matchingscreen").hide();
+      $("#playername").html(role);
+      $("#gamename").html("Evade");
     });
     
     window.addEventListener( "pageshow", function ( event ) {
@@ -84,12 +86,55 @@
     socket.on('your turn', function() {
       round++;
       if (round > 4) {
-        console.log("end of game");
+        socket.emit('last round played', {room: gameroom});
+        endGame();
       } else {
+        if (round == 1 || round == 2) {
+          $("#gamename").html("Evade");
+        } else if (round == 3 || round == 4) {
+          $("#gamename").html("Find");
+        }
+      
         $('#playscreen').show();
         $('#waitingscreen').hide();	
       }
     });
+    
+    socket.on('end game', function() {
+      endGame();
+    });
+    
+    function endGame() {
+      var cs = {round1: 0, round2: 0, round3: 0, round4: 0};
+      $.post('/postchoice', {round: 5}, function(data) {
+        cs.round1 = data.choices.round1;
+        cs.round2 = data.choices.round2;
+        cs.round3 = data.choices.round3;
+        cs.round4 = data.choices.round4;
+        
+        $('#playscreen').hide();
+        $('#waitingscreen').hide();
+        $('#resultsscreen').show();
+      
+        $('#choice1').html(cs.round1);
+        $('#choice2').html(cs.round2);
+        $('#choice3').html(cs.round3);
+        $('#choice4').html(cs.round4);
+      
+        if (cs.round1 === cs.round2) {
+          $('#evadeWinner').text('Seeker');
+        } else {
+          $('#evadeWinner').text('Hider');
+        }
+      
+        if (cs.round3 === cs.round4) {
+          $('#findResult').text('win');
+        } else {
+          $('#findResult').text('lose');
+        }
+      });
+      
+    }
     
   </script> 
 

@@ -78,7 +78,11 @@ io.on('connection', function(socket) {
 	
 	socket.on('made choice', function(data) {
 		socket.to(data.room).emit('your turn');
-	})
+	});
+	
+	socket.on('last round played', function(data) {
+		socket.to(data.room).emit('end game');
+	});
 	
 });
 

@@ -9,7 +9,7 @@ var fs = require('fs');
 var fileName = './HideAndSeekJson/data.json';
 var file = require(fileName);
 
-var choices = {round1: 0, round2: 0, round3: 0, round4: 0};
+var choices = {round1: 0, round2: 0, round3: 0, round4: 0, accesscounter: 0};
 
 var getLogin = function(req, res) {
 	if (!req.session.loggedIn) {
@@ -182,16 +182,16 @@ var processChoice = function(req, res) {
 
 var postChoice = function(req, res) {
 	var round = req.body.round;
-	var choice = req.body.choice;
-	console.log('round: '+round);
-	console.log('choice: '+choice);
-	choices["round"+round] = choice;
-	
-	if (round == 4) {
-		writeAndResetChoices();
+	if (round == 5) {
+		res.send({choices:choices});
+		choices.accesscounter++;
+		if (choices.accesscounter >= 2) {
+			writeAndResetChoices();
+		}
+	} else {
+		var choice = req.body.choice;
+		choices["round"+round] = choice;
 	}
-	
-	//res.send({round: round + 1})
 };
 
 function writeAndResetChoices() {
@@ -223,6 +223,7 @@ function writeAndResetChoices() {
 	choices.round2 = 0;
 	choices.round3 = 0;
 	choices.round4 = 0;
+	choices.accesscounter = 0;
 }
 
 var getResults = function(req, res) {
