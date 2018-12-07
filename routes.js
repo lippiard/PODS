@@ -49,6 +49,7 @@ var getCreate = function(req, res) {
 };
 
 var getPod = function(req, res) {
+	console.log("getting pod");
 	//get sid of clicked on gamesession
 	//keep track of sid in session variable
 	if (req.query.sid) {
@@ -179,6 +180,51 @@ var processChoice = function(req, res) {
 	}
 };
 
+var postChoice = function(req, res) {
+	var round = req.body.round;
+	var choice = req.body.choice;
+	console.log('round: '+round);
+	console.log('choice: '+choice);
+	choices["round"+round] = choice;
+	
+	if (round == 4) {
+		writeAndResetChoices();
+	}
+	
+	//res.send({round: round + 1})
+};
+
+function writeAndResetChoices() {
+	file.evadeHiderCount[choices.round1-1] = file.evadeHiderCount[choices.round1-1] + 1;
+	file.evadeSeekerCount[choices.round2-1] = file.evadeSeekerCount[choices.round2-1] + 1;
+	file.findHiderCount[choices.round3-1] = file.findHiderCount[choices.round3-1] + 1;
+	file.findSeekerCount[choices.round3-1] = file.findSeekerCount[choices.round3-1] + 1;
+	
+	if (choices.round1 == choices.round2) {
+		file.evadeSeekerScore[choices.round2-1] = file.evadeSeekerScore[choices.round2-1] +1;
+	} else {
+		file.evadeHiderScore[choices.round1-1] = file.evadeHiderScore[choices.round1-1] +1;
+	}
+	
+	if (choices.round3 == choices.round4) {
+		file.findSeekerScore[choices.round3-1] = file.evadeSeekerScore[choices.round3-1] +1;
+		file.findHiderScore[choices.round3-1] = file.evadeHiderScore[choices.round3-1] +1;
+	} 
+	
+	file.totalGamesPlayed = file.totalGamesPlayed + 1;
+	
+	fs.writeFile(fileName, JSON.stringify(file), function (err) {
+	  if (err) return console.log(err);
+	  console.log(JSON.stringify(file));
+	  console.log('writing to ' + fileName);
+	});
+	
+	choices.round1 = 0;
+	choices.round2 = 0;
+	choices.round3 = 0;
+	choices.round4 = 0;
+}
+
 var getResults = function(req, res) {
 //	var evadePayoffs = sd.get_payoffs('./HideAndSeekJson/evade.json', 
 //			choices.round1, choices.round2);
@@ -213,7 +259,8 @@ var routes = {
 	get_profile: getProfile,
 	get_create: getCreate,
 	get_pod: getPod,
-	get_sessions: getSessions
+	get_sessions: getSessions,
+	post_choice: postChoice
 };
 
 module.exports = routes;

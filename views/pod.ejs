@@ -18,8 +18,14 @@
   <div id="content">
 	<%- include(page, {game: game, player: player, choices: choices}); %>
   </div>
+  
+  <div id="resultsscreen">
+    <% -include("results", {}); %>
+  </div>
 
   <script>
+    var round;
+  
     jQuery(document).ready(function($) {
       $("#nav-placeholder").load("nav.ejs", function() {
         $(".nav").find(".active").removeClass("active");
@@ -28,6 +34,9 @@
       $("#matchingscreen").show();
       $("#playscreen").hide();
       $("#waitingscreen").hide();
+      $("#resultsscreen").hide();
+      
+      round = 1;
       
     });
     
@@ -64,16 +73,22 @@
     var formSubmit = function() {
       var choice = $("input[name='choice']:checked").val();
       $("input[name='choice']:checked").prop('checked', false); //unselect selected radio button (to reset for next round)
-      $.post('/processchoice', {choice: choice});
+      $.post('/postchoice', {choice: choice, round: round});
       $('#playscreen').hide();
       $('#waitingscreen').show();
       var player = "<%= player %>"
       socket.emit('made choice', {player: player, room: gameroom});
+      round++;
     };
     
     socket.on('your turn', function() {
-      $('#playscreen').show();
-      $('#waitingscreen').hide();	
+      round++;
+      if (round > 4) {
+        console.log("end of game");
+      } else {
+        $('#playscreen').show();
+        $('#waitingscreen').hide();	
+      }
     });
     
   </script> 
