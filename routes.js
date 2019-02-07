@@ -249,6 +249,10 @@ var getResults = function(req, res) {
 	
 };
 
+var getData = function(req, res) {
+	res.render('data.ejs');
+}
+
 
 var routes = {
 	get_main: getMain,
@@ -261,7 +265,8 @@ var routes = {
 	get_create: getCreate,
 	get_pod: getPod,
 	get_sessions: getSessions,
-	post_choice: postChoice
+	post_choice: postChoice,
+	get_data: getData
 };
 
 module.exports = routes;

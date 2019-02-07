@@ -37,6 +37,7 @@ app.get('/pod', routes.get_pod);
 app.get('/getsessions', routes.get_sessions);
 app.get('/main', routes.get_main);
 app.post('/postchoice', routes.post_choice);
+app.get('/data', routes.get_data);
 
 
 var queue = []; //list of sockets waiting to be matched
