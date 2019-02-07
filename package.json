@@ -9,13 +9,16 @@
 		"async": "*",
 		"aws-sdk": "*",
 		"body-parser": "*",
+		"crypto-js": "^3.1.9-1",
 		"ejs": "^2.6.1",
 		"express": "*",
 		"express-session": "^1.15.6",
 		"fs": "*",
+		"joi": "^14.3.1",
 		"jquery": "^3.3.1",
 		"plotly": "^1.0.6",
 		"socket.io": "^2.2.0",
-		"vogels": "*"
+		"uuid": "^3.3.2",
+		"vogels": "^2.2.0"
 	}
 }
