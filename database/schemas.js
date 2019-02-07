@@ -38,6 +38,12 @@ var Result = vogels.define('Result', {
 	}
 });
 
+var schemas = {
+	usersTable: User,
+	sessionsTable: Session,
+	resultsTable: Result
+};
+
 
 // LOADER //
 
