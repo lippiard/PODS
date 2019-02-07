@@ -38,6 +38,9 @@ var Result = vogels.define('Result', {
 	}
 });
 
+
+// LOADER //
+
 vogels.createTables(function(err) {
 	if (err) {
 		console.log(err);
