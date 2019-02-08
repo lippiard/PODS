@@ -33,6 +33,7 @@ var addUser = function(email, password, callback) {
 	});
 };
 
+<<<<<<< HEAD
 var addSession = function(sessionid, gametype, privateSession, creator, callback) {
 	var newSession = {sessionid: uuid(), gametype: gametype, privateSession: true, creator: uuid()};
 	schemas.sessionsTable.create(newSession, function(err, s) {
@@ -60,6 +61,14 @@ var addResult = function(sessionid, gametype, choices, results, callback) {
 
 addUser('tess@tess.com','passwords', function(err, user){
 console.log(user);
+=======
+addUser('tess@tess.com','passwords', function(err, user){
+	if (err) {
+		console.log(err);
+	} else {
+		console.log(user);
+	}
+>>>>>>> 0a8095c741ef2026739497eea93e176a467c883f
 });
 
 addSession(uuid(), 'Game', true, uuid(), function(err,session){

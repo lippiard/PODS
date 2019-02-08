@@ -279,7 +279,8 @@ var getData = function(req, res) {
 	if (!req.session.loggedIn) {
 		res.redirect('/login');
 	} else {
-		res.render('data.ejs');
+		res.render('data.ejs', {plots: ["//plot.ly/~team19/190.embed", "//plot.ly/~team19/188.embed",
+			"//plot.ly/~team19/189.embed", "//plot.ly/~team19/194.embed"]}); 
 	}
 }
 

@@ -46,6 +46,7 @@ var schemas = {
 
 module.exports =  schemas;
 
+
 // LOADER //
 
 vogels.createTables(function(err) {
@@ -81,5 +82,5 @@ vogels.createTables(function(err) {
 	}
 });
 
-
+module.exports = schemas;
 
