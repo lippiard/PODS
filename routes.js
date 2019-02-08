@@ -5,6 +5,7 @@ var sd = require('./simuldecision.js');
 var ejs = require('ejs');
 var fs = require('fs');
 var SHA3 = require('crypto-js/sha3');
+var db = require('./database/database.js')
 
 //var fileName = '../git/HideAndSeekJson/data.json';
 var fileName = './HideAndSeekJson/data.json';
@@ -25,13 +26,20 @@ var postCheckLogin = function(req, res) {
 	userInput = req.body.usernameInput;
 	passInput = req.body.passwordInput;
 	if (userInput && passInput) {
-		rightPass = SHA3('pass').toString();
-		if (userInput === 'user' && SHA3(passInput).toString() === rightPass) {
-			req.session.loggedIn = true;
-			res.redirect('/');
-		} else {
-			res.redirect('/login');
-		}
+		
+		db.get_user(userInput, function(err, u) {
+			if (err || !u) {
+				res.redirect('/login?err=1');
+			} else {
+				if (SHA3(passInput).toString() === u.password) {
+					req.session.loggedIn = true;
+					req.session.userID = u.userID;
+					res.redirect('/');
+				} else {
+					res.redirect('/login?err=1');
+				}
+			}
+		});
 	} else {
 		res.redirect('/login');
 	}

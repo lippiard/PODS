@@ -2,7 +2,7 @@ const Joi = require('joi');
 var vogels = require('vogels');
 const uuid = require('uuid/v4');
 var SHA3 = require('crypto-js/sha3');
-vogels.AWS.config.loadFromPath('../credentials.json');
+vogels.AWS.config.loadFromPath('./credentials.json');
 
 var User = vogels.define('User', {
 	hashKey: 'email',
