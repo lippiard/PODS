@@ -1,6 +1,6 @@
 const Joi = require('joi');
 var vogels = require('vogels');
-vogels.AWS.config.loadfromPath('credentials.json');
+vogels.AWS.config.loadFromPath('../credentials.json');
 var schemas = require('./schemas.js');
 var SHA3 = require('crypto-js/sha3');
 const uuid = require('uuid/v4');
