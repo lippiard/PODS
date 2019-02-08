@@ -33,6 +33,39 @@ var addUser = function(email, password, callback) {
 	});
 };
 
-addUser('tess','passwords', function(err, user){
+var addSession = function(sessionid, gametype, privateSession, creator, callback) {
+	var newSession = {sessionid: uuid(), gametype: gametype, privateSession: true, creator: uuid()};
+	schemas.sessionsTable.create(newSession, function(err, s) {
+		if (err) {
+			callback(err, null);
+		} else {
+			callback(null, s.attrs);
+		}
+	});
+};
+
+
+var addResult = function(sessionid, gametype, choices, results, callback) {
+	var newResult = {sessionid: uuid(), gametype: gametype, choices: choices, results: results };
+	schemas.resultsTable.create(newResult, function(err, r) {
+		if (err) {
+			callback(err, null);
+		} else {
+			callback(null, r.attrs);
+		}
+	});
+};
+
+
+
+addUser('tess@tess.com','passwords', function(err, user){
 console.log(user);
+});
+
+addSession(uuid(), 'Game', true, uuid(), function(err,session){
+console.log(session);
+});
+
+addResult(uuid(), 'Game', [['1' ,'2'], ['3', '4']], ['5', '6'], function(err,result){
+console.log(result);
 });

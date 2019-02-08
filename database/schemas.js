@@ -44,6 +44,7 @@ var schemas = {
 	resultsTable: Result
 };
 
+module.exports =  schemas;
 
 // LOADER //
 
