@@ -65,8 +65,7 @@ var getProfile = function (req, res) {
 	} else {
 		//get all game sessions with this user as creator
 		sessions = [
-			["1", {"type": "Hide and Seek", "private": "Yes", "creator": "Steve"}],
-			["2", {"type": "Evacuation", "private": "No", "creator": "Steve"}]
+			{"sessionname": "test hns", "gametype": "Hide and Seek", "privateSession": true, "creatornick": "Steve"}
 		];
 		res.render('profile.ejs', {sessions: sessions});
 	}
