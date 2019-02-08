@@ -33,6 +33,10 @@ var addUser = function(email, password, callback) {
 	});
 };
 
-addUser('tess','passwords', function(err, user){
-console.log(user);
+addUser('tess@tess.com','passwords', function(err, user){
+	if (err) {
+		console.log(err);
+	} else {
+		console.log(user);
+	}
 });
