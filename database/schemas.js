@@ -22,15 +22,17 @@ var Session = vogels.define('Session', {
 		sessionid: vogels.types.uuid(),
 		gametype: Joi.string(),
 		privateSession: Joi.boolean(),
-		creator: vogels.types.uuid()
+		creator: vogels.types.uuid(),
+		password: Joi.string()
 	}
 });
 
 var Result = vogels.define('Result', {
-	hashKey: 'sessionid',
-	rangeKey: 'gametype',
+	hashKey: 'resultid',
+	rangeKey: 'sessionid',
 	timestamps: true,
 	schema: {
+		resultid: vogels.types.uuid(),
 		sessionid: vogels.types.uuid(),
 		gametype: Joi.string(),
 		choices: Joi.array().items(Joi.array().items(Joi.string())),
@@ -44,16 +46,39 @@ var schemas = {
 	resultsTable: Result
 };
 
-module.exports =  schemas;
+module.exports = schemas;
 
 
-// LOADER //
+// LOADER - keep commented out unless using once //
 
-vogels.createTables(function(err) {
-	if (err) {
-		console.log(err);
-	} else {
-//		var user = {email: 'user@user.com', userID: uuid(), password: 'password'};
+//User.deleteTable(function(err) {
+//	if (err) {
+//		console.log(err);
+//	} else {
+//		console.log('table deleted');
+//	}
+//});
+//
+//Session.deleteTable(function(err) {
+//	if (err) {
+//		console.log(err);
+//	} else {
+//		console.log('table deleted');
+//	}
+//});
+//Result.deleteTable(function(err) {
+//	if (err) {
+//		console.log(err);
+//	} else {
+//		console.log('table deleted');
+//	}
+//});
+
+//vogels.createTables(function(err) {
+//	if (err) {
+//		console.log(err);
+//	} else {
+//		var user = {email: 'user@user.com', userID: uuid(), password: SHA3('password').toString()};
 //		User.create(user, function(err, u){
 //			if (err) {
 //				console.log(err);
@@ -61,8 +86,10 @@ vogels.createTables(function(err) {
 //				console.log('added user', u.get());
 //			}
 //		});
-		
-//		var session = {sessionid: uuid(), gametype:'Hide and Seek', privateSession: true, creator: uuid()};
+//		
+//		var sessionid = uuid();
+//		
+//		var session = {sessionid: sessionid, gametype:'Hide and Seek', privateSession: true, creator: uuid(), password: SHA3('game pass').toString()};
 //		Session.create(session, function(err, s) {
 //			if (err) {
 //				console.log(err);
@@ -70,8 +97,8 @@ vogels.createTables(function(err) {
 //				console.log('added session', s.get());
 //			}
 //		});
-		
-//		var result = {sessionid: uuid(), gametype: 'Hide and Seek', choices: [['1', '2'], ['3', '3']], results: [2, 1]};
+//		
+//		var result = {resultid: uuid(), sessionid: sessionid, gametype: 'Hide and Seek', choices: [['1', '2'], ['3', '3']], results: [2, 1]};
 //		Result.create(result, function(err, r) {
 //			if (err) {
 //				console.log(err);
@@ -79,8 +106,8 @@ vogels.createTables(function(err) {
 //				console.log('added result', r.get());
 //			}
 //		});
-	}
-});
+//	}
+//});
 
-module.exports = schemas;
+
 

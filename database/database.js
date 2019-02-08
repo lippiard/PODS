@@ -21,10 +21,27 @@ var exists = function(table, key, callback){
 	});
 };
 
-
 var addUser = function(email, password, callback) {
-	var newuser = {email: email, userID: uuid(), password: SHA3(password).toString()};
-	schemas.usersTable.create(newuser, function(err, u) {
+	exists(usersTable, email, function(exists_err, result) {
+		if (err) {
+			callback(err, null);
+		} else if (result) {
+			var newuser = {email: email, userID: uuid(), password: SHA3(password).toString()};
+			schemas.usersTable.create(newuser, function(err, u) {
+				if (err) {
+					callback(err, null);
+				} else {
+					callback(null, u.attrs);
+				}
+			});
+		} else {
+			callback('user already exists', null);
+		}
+	});	
+};
+
+var getUserFromEmail = function(email, callback) {
+	schemas.usersTable.get(email, function(err, u) {
 		if (err) {
 			callback(err, null);
 		} else {
@@ -56,19 +73,3 @@ var addResult = function(sessionid, gametype, choices, results, callback) {
 	});
 };
 
-
-addUser('tess@tess.com','passwords', function(err, user){
-	if (err) {
-		console.log(err);
-	} else {
-		console.log(user);
-	}
-});
-
-addSession(uuid(), 'Game', true, uuid(), function(err,session){
-	console.log(session);
-});
-
-addResult(uuid(), 'Game', [['1' ,'2'], ['3', '4']], ['5', '6'], function(err,result){
-	console.log(result);
-});
