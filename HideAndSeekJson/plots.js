@@ -50,12 +50,14 @@ var trace1 = {
 	  x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
 	  y: evadeHiderCountPercents,
 	  name: "Hider",
+	  marker: {color: 'red'},
 	  type: "bar"
 		};
 var trace2 = {
 		x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
 		y: evadeSeekerCountPercents,
 		name: "Seeker",
+		marker: {color: 'blue'},
 		type: "bar"
 };
 var data = [trace1, trace2];
@@ -75,12 +77,14 @@ var trace1 = {
 		  x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
 		  y: findHiderCountPercents,
 		  name: "Hider",
+		  marker: {color: 'red'},
 		  type: "bar"
 			};
 	var trace2 = {
 			x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
 			y: findSeekerCountPercents,
 			name: "Seeker",
+			marker: {color: 'blue'},
 			type: "bar"
 	};
 	var data = [trace1, trace2];
@@ -101,12 +105,14 @@ var trace1 = {
 			  x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
 			  y: evadeHiderScorePercents,
 			  name: "Hider",
+			  marker: {color: 'red'},
 			  type: "bar"
 				};
 		var trace2 = {
 				x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
 				y: evadeSeekerScorePercents,
 				name: "Seeker",
+				marker: {color: 'blue'},
 				type: "bar"
 		};
 		var data = [trace1, trace2];
@@ -126,12 +132,14 @@ var trace1 = {
 				  x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
 				  y: findHiderScorePercents,
 				  name: "Hider",
+				  marker: {color: 'red'},
 				  type: "bar"
 					};
 			var trace2 = {
 					x: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
 					y: findSeekerScorePercents,
 					name: "Seeker",
+					marker: {color: 'blue'},
 					type: "bar"
 			};
 			var data = [trace1, trace2];
