@@ -68,7 +68,7 @@ var layout = {barmode: "group", title: "Evade Selections",
 			  yaxis: {
 			    title: "Frequency",
 			  }};
-var graphOptions = {layout: layout, filename: "grouped-bar", fileopt: "new"};
+var graphOptions = {layout: layout, filename: "Evade Selections", fileopt: "overwrite"};
 plotly.plot(data, graphOptions, function (err, msg) {
    console.log(msg.url);
 });
@@ -95,7 +95,7 @@ var trace1 = {
 				  yaxis: {
 				    title: "Frequency",
 				  }};
-	var graphOptions = {layout: layout, filename: "grouped-bar", fileopt: "new"};
+	var graphOptions = {layout: layout, filename: "Find Selections", fileopt: "overwrite"};
 	plotly.plot(data, graphOptions, function (err, msg) {
 	   console.log(msg.url);
 	});
@@ -123,7 +123,7 @@ var trace1 = {
 					  yaxis: {
 					    title: "Evade Win Percentage",
 					  }};
-		var graphOptions = {layout: layout, filename: "grouped-bar", fileopt: "new"};
+		var graphOptions = {layout: layout, filename: "Evade Wins", fileopt: "overwrite"};
 		plotly.plot(data, graphOptions, function (err, msg) {
 		   console.log(msg.url);
 		});
@@ -150,7 +150,7 @@ var trace1 = {
 						  yaxis: {
 						    title: "Frequency",
 						  }};
-			var graphOptions = {layout: layout, filename: "grouped-bar", fileopt: "new"};
+			var graphOptions = {layout: layout, filename: "Find Wins", fileopt: "overwrite"};
 			plotly.plot(data, graphOptions, function (err, msg) {
 			   console.log(msg.url);
 			});

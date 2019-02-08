@@ -14,17 +14,28 @@
   </div>
   <h1>This is the profile page.</h1>
   
-  	<body>
+  <h2> My Games: </h2>
+  <div id="content">
+    <% include table %>
+  </div>
+  
+  <body>
 	<a href="/data">Results</a>
-	</body>
+  </body>
   
 
   <script>
     jQuery(document).ready(function($) {
+    
       $("#nav-placeholder").load("nav.ejs", function() {
         $(".nav").find(".active").removeClass("active");
         $("#profilelink").addClass("active");
       });
+      
+      $(".clickable-row").click(function() {
+        window.location.href = "/data";
+      });
+      
     });
   </script> 
 
