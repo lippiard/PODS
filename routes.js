@@ -54,11 +54,24 @@ var getHome = function(req, res) {
 };
 
 var getProfile = function (req, res) {
-	res.render('profile.ejs');
+	if (!req.session.loggedIn) {
+		res.redirect('/login');
+	} else {
+		//get all game sessions with this user as creator
+		sessions = [
+			["1", {"type": "Hide and Seek", "private": "Yes", "creator": "Steve"}],
+			["2", {"type": "Evacuation", "private": "No", "creator": "Steve"}]
+		];
+		res.render('profile.ejs', {sessions: sessions});
+	}
 };
 
 var getCreate = function(req, res) {
-	res.render('create.ejs');
+	if (!req.session.loggedIn) {
+		res.redirect('/login');
+	} else {
+		res.render('create.ejs');
+	}
 };
 
 var getPod = function(req, res) {
@@ -263,7 +276,11 @@ var getResults = function(req, res) {
 };
 
 var getData = function(req, res) {
-	res.render('data.ejs');
+	if (!req.session.loggedIn) {
+		res.redirect('/login');
+	} else {
+		res.render('data.ejs');
+	}
 }
 
 
