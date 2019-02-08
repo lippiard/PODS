@@ -10,7 +10,8 @@ var User = vogels.define('User', {
 	schema: {
 		email: Joi.string().email(),
 		userID: vogels.types.uuid(),
-		password: Joi.string()
+		password: Joi.string(),
+		nickname: Joi.string()
 	}
 });
 
@@ -21,8 +22,10 @@ var Session = vogels.define('Session', {
 	schema: {
 		sessionid: vogels.types.uuid(),
 		gametype: Joi.string(),
+		sessionname: Joi.string(),
 		privateSession: Joi.boolean(),
 		creator: vogels.types.uuid(),
+		creatornick: Joi.string(),
 		password: Joi.string()
 	}
 });
@@ -78,7 +81,8 @@ module.exports = schemas;
 //	if (err) {
 //		console.log(err);
 //	} else {
-//		var user = {email: 'user@user.com', userID: uuid(), password: SHA3('password').toString()};
+//      var id = uuid();
+//		var user = {email: 'user@user.com', userID: id, password: SHA3('password').toString(), nickname: 'Steve'};
 //		User.create(user, function(err, u){
 //			if (err) {
 //				console.log(err);
@@ -89,7 +93,7 @@ module.exports = schemas;
 //		
 //		var sessionid = uuid();
 //		
-//		var session = {sessionid: sessionid, gametype:'Hide and Seek', privateSession: true, creator: uuid(), password: SHA3('game pass').toString()};
+//		var session = {sessionid: sessionid, gametype:'Hide and Seek', sessionname: 'test hns', privateSession: true, creator: id, creatornick: 'Steve', password: SHA3('game pass').toString()};
 //		Session.create(session, function(err, s) {
 //			if (err) {
 //				console.log(err);

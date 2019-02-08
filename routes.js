@@ -52,12 +52,10 @@ var getHome = function(req, res) {
 		res.redirect('/login');
 	} else {
 		//get all game sessions from database, send array to home.ejs
-		sessions = [
-			["1", {"type": "Hide and Seek", "private": "Yes", "creator": "Steve"}],
-			["2", {"type": "Evacuation", "private": "No", "creator": "Steve"}]
-		];
-		req.session.round = 1;
-		res.render('home.ejs', {sessions: sessions});
+		db.get_sessions(function(err, data) {
+			req.session.round = 1;
+			res.render('home.ejs', {sessions: data});
+		});
 	}
 };
 

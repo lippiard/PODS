@@ -62,7 +62,14 @@ var addSession = function(gametype, privateSession, creator, callback) {
 };
 
 var getSessions = function(callback) {
-	
+	schemas.sessionsTable.scan().exec(function(err, results) {
+		if (err || !results) {
+			callback(err, null);
+		} else {
+			let rs = results.Items.map(r => r.attrs);
+			callback(null, rs);
+		}
+	});
 };
 
 
@@ -78,7 +85,8 @@ var addResult = function(sessionid, gametype, choices, results, callback) {
 };
 
 var dbfuncs = {
-		get_user: getUserFromEmail	
+		get_user: getUserFromEmail,
+		get_sessions: getSessions
 };
 
 module.exports = dbfuncs;
