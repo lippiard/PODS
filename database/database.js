@@ -72,6 +72,17 @@ var getSessions = function(callback) {
 	});
 };
 
+var getCreatorSessions = function(creatorid, callback) {
+	schemas.sessionsTable.scan().where('creator').equals(creatorid).exec(function(err, results) {
+		if (err || !results) {
+			callback(err, null);
+		} else {
+			let rs = results.Items.map(r => r.attrs);
+			callback(null, rs);
+		}
+	});
+};
+
 
 var addResult = function(sessionid, gametype, choices, results, callback) {
 	var newResult = {resultid: uuid(), sessionid: sessionid, gametype: gametype, choices: choices, results: results };
@@ -86,7 +97,8 @@ var addResult = function(sessionid, gametype, choices, results, callback) {
 
 var dbfuncs = {
 		get_user: getUserFromEmail,
-		get_sessions: getSessions
+		get_sessions: getSessions,
+		get_creator_sessions: getCreatorSessions
 };
 
 module.exports = dbfuncs;

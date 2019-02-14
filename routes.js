@@ -64,10 +64,14 @@ var getProfile = function (req, res) {
 		res.redirect('/login');
 	} else {
 		//get all game sessions with this user as creator
-		sessions = [
-			{"sessionname": "test hns", "gametype": "Hide and Seek", "privateSession": true, "creatornick": "Steve"}
-		];
-		res.render('profile.ejs', {sessions: sessions});
+		db.get_creator_sessions(req.session.userID, function(err, rs) {
+			if (err || !rs) {
+				res.render('profile.ejs', {sessions: []});
+			} else {
+				res.render('profile.ejs', {sessions: rs});
+			}
+		});
+		//res.render('profile.ejs', {sessions: sessions});
 	}
 };
 
