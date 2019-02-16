@@ -291,7 +291,11 @@ var getData = function(req, res) {
 		res.render('data.ejs', {plots: ["//plot.ly/~team19/190.embed", "//plot.ly/~team19/188.embed",
 			"//plot.ly/~team19/189.embed", "//plot.ly/~team19/194.embed"]}); 
 	}
-}
+};
+
+var postCreateSession = function(req, res) {
+	
+};
 
 
 var routes = {
@@ -306,7 +310,8 @@ var routes = {
 	get_pod: getPod,
 	get_sessions: getSessions,
 	post_choice: postChoice,
-	get_data: getData
+	get_data: getData,
+	post_create_session: postCreateSession
 };
 
 module.exports = routes;

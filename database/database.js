@@ -95,6 +95,10 @@ var addResult = function(sessionid, gametype, choices, results, callback) {
 	});
 };
 
+var createSession = function(gametype, sessionname, privateSession, creator, password, callback) {
+	
+};
+
 var dbfuncs = {
 		get_user: getUserFromEmail,
 		get_sessions: getSessions,
