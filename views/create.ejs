@@ -14,12 +14,12 @@
   <div class="row justify-content-md-center">
 	  <div class="col-md-auto">
 	  	  <h2>Create a new POD</h2>
-		  <form>
+		  <form action="/createsession" method="post">
 		    <div class="form-group">
-		      <input class="form-control" type="text" id="sessionNameInput" placeholder="Session name">
+		      <input class="form-control" type="text" name="sessionNameInput" id="sessionNameInput" placeholder="Session name">
 		    </div>
 		    <div class="form-group">
-		      <select class="form-control" id="gametypeSelect">
+		      <select class="form-control" name="gameTypeSelect" id="gametypeSelect">
 		        <option>Hide and Seek</option>
 		      </select>
 		    </div>
@@ -27,12 +27,12 @@
 		      <div class="form-row">
 		      	  <div class="form-group col-md-4">
 			        <div class="form-check">
-			          <input type="checkbox" class="form-check-input" id="privateCheck">
+			          <input type="checkbox" class="form-check-input" name="privateCheck" id="privateCheck">
 			          <label class="form-check-label" for="gridCheck">Private session?</label>
 			        </div>
 			      </div>
 			      <div class="form-group col-md-8">
-			        <input class="form-control" type="text" id="sessionPassword" placeholder="Session password" disabled>
+			        <input class="form-control" type="text" name="sessionPassword" id="sessionPassword" placeholder="Session password" disabled>
 			      </div>
 		      </div>
 		    </div>

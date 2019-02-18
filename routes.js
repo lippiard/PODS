@@ -7,7 +7,6 @@ var fs = require('fs');
 var SHA3 = require('crypto-js/sha3');
 var db = require('./database/database.js')
 
-//var fileName = '../git/HideAndSeekJson/data.json';
 var fileName = './HideAndSeekJson/data.json';
 var file = require(fileName);
 
@@ -34,6 +33,8 @@ var postCheckLogin = function(req, res) {
 				if (SHA3(passInput).toString() === u.password) {
 					req.session.loggedIn = true;
 					req.session.userID = u.userID;
+					req.session.userNick = u.nickname;
+					console.log(req.session.userNick);
 					res.redirect('/');
 				} else {
 					res.redirect('/login?err=1');
@@ -53,6 +54,7 @@ var getHome = function(req, res) {
 	} else {
 		//get all game sessions from database, send array to home.ejs
 		db.get_sessions(function(err, data) {
+			console.log(data);
 			req.session.round = 1;
 			res.render('home.ejs', {sessions: data});
 		});
@@ -294,7 +296,22 @@ var getData = function(req, res) {
 };
 
 var postCreateSession = function(req, res) {
-	
+	if (!req.session.loggedIn) {
+		res.redirect('/login');
+	} else {
+		console.log(req.body.sessionNameInput);
+		console.log(req.body.gameTypeSelect);
+		console.log(req.body.privateCheck === 'on');
+		console.log(req.body.sessionPassword);
+		db.create_session(req.body.gameTypeSelect, req.body.sessionNameInput, req.body.privateCheck === 'on', req.session.userID, 
+				req.session.userNick, req.body.sessionPassword, function(err, session) {
+			if (err) {
+				res.redirect('/create?err=1');
+			} else {
+				res.redirect('/profile');
+			}
+		})
+	}
 };
 
 

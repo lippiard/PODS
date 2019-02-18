@@ -87,7 +87,7 @@ var getCreatorSessions = function(creatorid, callback) {
 var addResult = function(sessionid, gametype, choices, results, callback) {
 	var newResult = {resultid: uuid(), sessionid: sessionid, gametype: gametype, choices: choices, results: results };
 	schemas.resultsTable.create(newResult, function(err, r) {
-		if (err || !u) {
+		if (err || !r) {
 			callback(err, null);
 		} else {
 			callback(null, r.attrs);
@@ -95,14 +95,22 @@ var addResult = function(sessionid, gametype, choices, results, callback) {
 	});
 };
 
-var createSession = function(gametype, sessionname, privateSession, creator, password, callback) {
-	
+var createSession = function(gametype, sessionname, privateSession, creatorid, creatornick, password, callback) {
+	var newSession = {sessionid: uuid(), gametype: gametype, sessionname: sessionname, privateSession: privateSession, creator: creatorid, creatornick: creatornick, password: password};
+	schemas.sessionsTable.create(newSession, function(err, s) {
+		if (err || !s) {
+			callback(err, null);
+		} else {
+			callback(null, s.attrs);
+		}
+	});
 };
 
 var dbfuncs = {
 		get_user: getUserFromEmail,
 		get_sessions: getSessions,
-		get_creator_sessions: getCreatorSessions
+		get_creator_sessions: getCreatorSessions,
+		create_session: createSession
 };
 
 module.exports = dbfuncs;

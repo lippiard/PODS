@@ -1,3 +1,11 @@
+//DIRECTIONS:
+//when using the loader, change the path to aws creds to '../credentials.json'
+//uncomment delete functions and run schemas.js
+//wait for a minute or two so tables finish deleting
+//comment out delete functions, uncomment createTables function
+//run schemas.js again, then comment out createTables function again
+//revert aws creds path  to './credentials.json'
+
 const Joi = require('joi');
 var vogels = require('vogels');
 const uuid = require('uuid/v4');
