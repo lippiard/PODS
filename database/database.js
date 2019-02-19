@@ -25,7 +25,7 @@ var addUser = function(email, password, callback) {
 	exists(usersTable, email, function(exists_err, result) {
 		if (err) {
 			callback(err, null);
-		} else if (result) {
+		} else if (!result) {
 			var newuser = {email: email, userID: uuid(), password: SHA3(password).toString()};
 			schemas.usersTable.create(newuser, function(err, u) {
 				if (err || !u) {
@@ -110,7 +110,8 @@ var dbfuncs = {
 		get_user: getUserFromEmail,
 		get_sessions: getSessions,
 		get_creator_sessions: getCreatorSessions,
-		create_session: createSession
+		create_session: createSession,
+		add_user: addUser
 };
 
 module.exports = dbfuncs;

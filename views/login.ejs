@@ -15,7 +15,7 @@
       <form action="/checklogin" method="post">
         <div class="form-group">
           <label for="usernameInput">Email address</label>
-          <input type="text" class="form-control" name="usernameInput" placeholder="Enter username">
+          <input type="email" class="form-control" name="usernameInput" placeholder="Enter username">
         </div>
         <div class="form-group">
           <label for="passwordInput">Password</label>
@@ -23,7 +23,12 @@
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
       </form>
-      Sign up <a href="/signup">here</a>.
+      <div id="messageContainer">
+        <% if (message) { %>
+          <font color="red"><%= message %></font>
+        <% } %>
+      </div>
+      Don't have an account yet? Sign up <a href="/signup">here</a>.
     </div>
     <div class="col col-lg-2"></div>
   </div">
@@ -35,7 +40,6 @@
       var historyTraversal = event.persisted || 
                          ( typeof window.performance != "undefined" && 
                               window.performance.navigation.type === 2 );
-      console.log("here");
       if ( historyTraversal ) {
         window.location.reload();
       }

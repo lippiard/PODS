@@ -13,8 +13,26 @@ var file = require(fileName);
 var choices = {round1: 0, round2: 0, round3: 0, round4: 0, accesscounter: 0};
 
 var getLogin = function(req, res) {
+	var err = req.query.err;
+	var message;
+	if (err == 1) {
+		message = 'Incorrect username or password. Please try again.';
+	}
 	if (!req.session.loggedIn) {
-		res.render('login.ejs');
+		res.render('login.ejs', {message: message});
+	} else {
+		res.redirect('/');
+	}
+};
+
+var getSignup = function(req, res) {
+	var err = req.query.err;
+	var messages = {1: 'All fields are required.', 2: 'Passwords did not match.', 
+			3: 'An account with this email already exists'};
+	var message
+	message = messages[err];
+	if (!req.session.loggedIn) {
+		res.render('signup.ejs');
 	} else {
 		res.redirect('/');
 	}
@@ -24,8 +42,7 @@ var postCheckLogin = function(req, res) {
 	req.session.loggedIn = false;
 	userInput = req.body.usernameInput;
 	passInput = req.body.passwordInput;
-	if (userInput && passInput) {
-		
+	if (userInput && passInput) {	
 		db.get_user(userInput, function(err, u) {
 			if (err || !u) {
 				res.redirect('/login?err=1');
@@ -34,7 +51,6 @@ var postCheckLogin = function(req, res) {
 					req.session.loggedIn = true;
 					req.session.userID = u.userID;
 					req.session.userNick = u.nickname;
-					console.log(req.session.userNick);
 					res.redirect('/');
 				} else {
 					res.redirect('/login?err=1');
@@ -42,9 +58,34 @@ var postCheckLogin = function(req, res) {
 			}
 		});
 	} else {
-		res.redirect('/login');
+		res.redirect('/login?err=1');
 	}
 	//res.redirect('/');
+};
+
+var postCreateAccount = function(req, res) {
+	userInput = req.body.usernameInput;
+	passInput1 = req.body.passwordInput;
+	passInput2 = req.body.verifyPasswordInput;
+	if (userInput && passInput1 && passInput2) {
+		if (passInput1 === passInput2) {
+			db.add_user(userInput, passInput1, function(err, u) {
+				if (err || !u) {
+					if (err === 'user already exists') {
+						res.redirect('/signup?err=3');
+					} else {
+						res.redirect('/signup?err=4');
+					}
+				} else {
+					
+				}
+			});
+		} else {
+			res.redirect('/signup?err=2');
+		}
+	} else {
+		res.redirect('/signup?err=1');
+	}
 };
 
 var getHome = function(req, res) {
@@ -54,7 +95,6 @@ var getHome = function(req, res) {
 	} else {
 		//get all game sessions from database, send array to home.ejs
 		db.get_sessions(function(err, data) {
-			console.log(data);
 			req.session.round = 1;
 			res.render('home.ejs', {sessions: data});
 		});
@@ -299,10 +339,6 @@ var postCreateSession = function(req, res) {
 	if (!req.session.loggedIn) {
 		res.redirect('/login');
 	} else {
-		console.log(req.body.sessionNameInput);
-		console.log(req.body.gameTypeSelect);
-		console.log(req.body.privateCheck === 'on');
-		console.log(req.body.sessionPassword);
 		db.create_session(req.body.gameTypeSelect, req.body.sessionNameInput, req.body.privateCheck === 'on', req.session.userID, 
 				req.session.userNick, req.body.sessionPassword, function(err, session) {
 			if (err) {
@@ -328,7 +364,8 @@ var routes = {
 	get_sessions: getSessions,
 	post_choice: postChoice,
 	get_data: getData,
-	post_create_session: postCreateSession
+	post_create_session: postCreateSession,
+	get_signup: getSignup
 };
 
 module.exports = routes;
