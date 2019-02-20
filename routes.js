@@ -29,10 +29,10 @@ var getSignup = function(req, res) {
 	var err = req.query.err;
 	var messages = {1: 'All fields are required.', 2: 'Passwords did not match.', 
 			3: 'An account with this email already exists'};
-	var message
+	var message;
 	message = messages[err];
 	if (!req.session.loggedIn) {
-		res.render('signup.ejs');
+		res.render('signup.ejs', {message: message});
 	} else {
 		res.redirect('/');
 	}
@@ -77,7 +77,10 @@ var postCreateAccount = function(req, res) {
 						res.redirect('/signup?err=4');
 					}
 				} else {
-					
+					req.session.userID = u.userID;
+					req.session.userNick = u.nickname;
+					req.session.loggedIn = true;
+					res.redirect('/');
 				}
 			});
 		} else {
@@ -138,53 +141,53 @@ var getPod = function(req, res) {
 		var game = null;
 		var player = null;
 		var page = 'main';
-		if (round == 1 || round == null) {
-			choices.round1 = 0;
-			choices.round2 = 0;
-			choices.round3 = 0;
-			choices.round4 = 0;
-			game = "Evade";
-			player = "Hider";
-			req.session.round = 1;
-		} else if (round == 2) {
-			game = "Evade";
-			player = "Seeker";
-			req.session.round = 2;
-		} else if (round == 3) {
-			game = "Find";
-			player = "Hider";
-			req.session.round = 3;
-		} else if (round == 4) {
-			game = "Find";
-			player = "Seeker";
-			req.session.round = 4;
-		} else if (round == 5) {
-			page = 'results';
-			
-			file.evadeHiderCount[choices.round1-1] = file.evadeHiderCount[choices.round1-1] + 1;
-			file.evadeSeekerCount[choices.round2-1] = file.evadeSeekerCount[choices.round2-1] + 1;
-			file.findHiderCount[choices.round3-1] = file.findHiderCount[choices.round3-1] + 1;
-			file.findSeekerCount[choices.round3-1] = file.findSeekerCount[choices.round3-1] + 1;
-			
-			if (choices.round1 == choices.round2) {
-				file.evadeSeekerScore[choices.round2-1] = file.evadeSeekerScore[choices.round2-1] +1;
-			} else {
-				file.evadeHiderScore[choices.round1-1] = file.evadeHiderScore[choices.round1-1] +1;
-			}
-			
-			if (choices.round3 == choices.round4) {
-				file.findSeekerScore[choices.round3-1] = file.evadeSeekerScore[choices.round3-1] +1;
-				file.findHiderScore[choices.round3-1] = file.evadeHiderScore[choices.round3-1] +1;
-			} 
-			
-			file.totalGamesPlayed = file.totalGamesPlayed + 1;
-			
-			fs.writeFile(fileName, JSON.stringify(file), function (err) {
-			  if (err) return console.log(err);
-			  console.log(JSON.stringify(file));
-			  console.log('writing to ' + fileName);
-			});
-		}
+//		if (round == 1 || round == null) {
+//			choices.round1 = 0;
+//			choices.round2 = 0;
+//			choices.round3 = 0;
+//			choices.round4 = 0;
+//			game = "Evade";
+//			player = "Hider";
+//			req.session.round = 1;
+//		} else if (round == 2) {
+//			game = "Evade";
+//			player = "Seeker";
+//			req.session.round = 2;
+//		} else if (round == 3) {
+//			game = "Find";
+//			player = "Hider";
+//			req.session.round = 3;
+//		} else if (round == 4) {
+//			game = "Find";
+//			player = "Seeker";
+//			req.session.round = 4;
+//		} else if (round == 5) {
+//			page = 'results';
+//			
+//			file.evadeHiderCount[choices.round1-1] = file.evadeHiderCount[choices.round1-1] + 1;
+//			file.evadeSeekerCount[choices.round2-1] = file.evadeSeekerCount[choices.round2-1] + 1;
+//			file.findHiderCount[choices.round3-1] = file.findHiderCount[choices.round3-1] + 1;
+//			file.findSeekerCount[choices.round3-1] = file.findSeekerCount[choices.round3-1] + 1;
+//			
+//			if (choices.round1 == choices.round2) {
+//				file.evadeSeekerScore[choices.round2-1] = file.evadeSeekerScore[choices.round2-1] +1;
+//			} else {
+//				file.evadeHiderScore[choices.round1-1] = file.evadeHiderScore[choices.round1-1] +1;
+//			}
+//			
+//			if (choices.round3 == choices.round4) {
+//				file.findSeekerScore[choices.round3-1] = file.evadeSeekerScore[choices.round3-1] +1;
+//				file.findHiderScore[choices.round3-1] = file.evadeHiderScore[choices.round3-1] +1;
+//			} 
+//			
+//			file.totalGamesPlayed = file.totalGamesPlayed + 1;
+//			
+//			fs.writeFile(fileName, JSON.stringify(file), function (err) {
+//			  if (err) return console.log(err);
+//			  console.log(JSON.stringify(file));
+//			  console.log('writing to ' + fileName);
+//			});
+//		}
 		res.render('pod.ejs', {sid: req.session.currentSID, 
 			game: game, player: player, page: page, choices: choices});
 	} else {
@@ -193,69 +196,69 @@ var getPod = function(req, res) {
 	}
 };
 
-var getSessions = function(req, res) {
-	sessions = [
-		["1", {"type": "Hide and Seek", "private": "Yes", "creator": "Steve"}],
-		["2", {"type": "Evacuation", "private": "No", "creator": "Steve"}]
-	];
-	res.send(JSON.stringify({sessions: sessions}));
-};
+//var getSessions = function(req, res) {
+//	sessions = [
+//		["1", {"type": "Hide and Seek", "private": "Yes", "creator": "Steve"}],
+//		["2", {"type": "Evacuation", "private": "No", "creator": "Steve"}]
+//	];
+//	res.send(JSON.stringify({sessions: sessions}));
+//};
 
-var getMain = function(req, res) {
-	if (!req.session.loggedIn) {
-		res.redirect('/login');
-	} else {
-		var round = req.session.round;
-		var game = null;
-		var player = null;
-		if (round == 1 || round == null) {
-			choices.round1 = 0;
-			choices.round2 = 0;
-			choices.round3 = 0;
-			choices.round4 = 0;
-			game = "Evade";
-			player = "Hider";
-			req.session.round = 1;
-		} else if (round == 2) {
-			game = "Evade";
-			player = "Seeker";
-			req.session.round = 2;
-		} else if (round == 3) {
-			game = "Find";
-			player = "Hider";
-			req.session.round = 3;
-		} else if (round == 4) {
-			game = "Find";
-			player = "Seeker";
-			req.session.round = 4;
-		}
-		res.render('main.ejs', {game: game, player: player});
-	}
-};
+//var getMain = function(req, res) {
+//	if (!req.session.loggedIn) {
+//		res.redirect('/login');
+//	} else {
+//		var round = req.session.round;
+//		var game = null;
+//		var player = null;
+//		if (round == 1 || round == null) {
+//			choices.round1 = 0;
+//			choices.round2 = 0;
+//			choices.round3 = 0;
+//			choices.round4 = 0;
+//			game = "Evade";
+//			player = "Hider";
+//			req.session.round = 1;
+//		} else if (round == 2) {
+//			game = "Evade";
+//			player = "Seeker";
+//			req.session.round = 2;
+//		} else if (round == 3) {
+//			game = "Find";
+//			player = "Hider";
+//			req.session.round = 3;
+//		} else if (round == 4) {
+//			game = "Find";
+//			player = "Seeker";
+//			req.session.round = 4;
+//		}
+//		res.render('main.ejs', {game: game, player: player});
+//	}
+//};
 	
-var processChoice = function(req, res) {
-	var thischoice = req.body.choice;
-	var round = req.session.round;
-	if (round == 1 || round == null) {
-		choices['round'+round] = thischoice;
-		req.session.round = 2;
-		res.redirect("/pod");
-	} else if (round == 2) {
-		req.session.round = 3;
-		choices['round'+round] = thischoice;
-		res.redirect("/pod");
-	} else if (round == 3) {
-		req.session.round = 4; 
-		choices['round'+round] = thischoice;
-		res.redirect("/pod");
-	} else if (round == 4) {
-		req.session.round = 5;
-		choices['round'+round] = thischoice;
-		res.redirect("/pod");
-	} else {
-		res.redirect("/");
-	}
-};
+//var processChoice = function(req, res) {
+//	var thischoice = req.body.choice;
+//	var round = req.session.round;
+//	if (round == 1 || round == null) {
+//		choices['round'+round] = thischoice;
+//		req.session.round = 2;
+//		res.redirect("/pod");
+//	} else if (round == 2) {
+//		req.session.round = 3;
+//		choices['round'+round] = thischoice;
+//		res.redirect("/pod");
+//	} else if (round == 3) {
+//		req.session.round = 4; 
+//		choices['round'+round] = thischoice;
+//		res.redirect("/pod");
+//	} else if (round == 4) {
+//		req.session.round = 5;
+//		choices['round'+round] = thischoice;
+//		res.redirect("/pod");
+//	} else {
+//		res.redirect("/");
+//	}
+//};
 
 var postChoice = function(req, res) {
 	var round = req.body.round;
@@ -352,8 +355,8 @@ var postCreateSession = function(req, res) {
 
 
 var routes = {
-	get_main: getMain,
-	process_choice: processChoice,
+	//get_main: getMain,
+	//process_choice: processChoice,
 	get_results: getResults,
 	get_login: getLogin,
 	post_check_login: postCheckLogin,
@@ -361,11 +364,12 @@ var routes = {
 	get_profile: getProfile,
 	get_create: getCreate,
 	get_pod: getPod,
-	get_sessions: getSessions,
+	//get_sessions: getSessions,
 	post_choice: postChoice,
 	get_data: getData,
 	post_create_session: postCreateSession,
-	get_signup: getSignup
+	get_signup: getSignup,
+	post_create_account: postCreateAccount
 };
 
 module.exports = routes;

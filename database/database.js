@@ -22,8 +22,8 @@ var exists = function(table, key, callback){
 };
 
 var addUser = function(email, password, callback) {
-	exists(usersTable, email, function(exists_err, result) {
-		if (err) {
+	exists('usersTable', email, function(exists_err, result) {
+		if (exists_err) {
 			callback(err, null);
 		} else if (!result) {
 			var newuser = {email: email, userID: uuid(), password: SHA3(password).toString()};

@@ -27,19 +27,20 @@ app.use(session({
 
 //app.get('/', routes.get_main);
 app.get('/', routes.get_home);
-app.post('/processchoice', routes.process_choice);
+//app.post('/processchoice', routes.process_choice);
 app.get('/results', routes.get_results);
 app.get('/login', routes.get_login);
 app.post('/checklogin', routes.post_check_login);
 app.get('/profile', routes.get_profile);
 app.get('/create', routes.get_create);
 app.get('/pod', routes.get_pod);
-app.get('/getsessions', routes.get_sessions);
-app.get('/main', routes.get_main);
+//app.get('/getsessions', routes.get_sessions);
+//app.get('/main', routes.get_main);
 app.post('/postchoice', routes.post_choice);
 app.get('/data', routes.get_data);
 app.post('/createsession', routes.post_create_session);
 app.get('/signup', routes.get_signup);
+app.post('/createaccount', routes.post_create_account);
 
 var queue = []; //list of sockets waiting to be matched
 
