@@ -38,6 +38,8 @@ var Session = vogels.define('Session', {
 	}
 });
 
+
+//currently experimenting with making nrows = number players and ncols = number of choices per player
 var Result = vogels.define('Result', {
 	hashKey: 'resultid',
 	rangeKey: 'sessionid',
@@ -46,7 +48,7 @@ var Result = vogels.define('Result', {
 		resultid: vogels.types.uuid(),
 		sessionid: vogels.types.uuid(),
 		gametype: Joi.string(),
-		choices: Joi.array().items(Joi.array().items(Joi.string())),
+		choices: Joi.array().items(Joi.array().items(Joi.string())), //array of choices, nrows = number of choices per player, ncols = number of players
 		results: Joi.array().items(Joi.number())
 	}
 });

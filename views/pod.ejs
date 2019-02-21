@@ -15,15 +15,26 @@
   </div>
   <!-- <h1>This is the POD page. The ID of this game session is <%= sid %></h1> -->
 
-  <div id="content">
-	<%- include(page, {game: game, player: player, choices: choices}); %>
-  </div>
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-2"></div>
+    <div class="col col-md-auto">
+
+      <div id="content">
+	    <%- include(page, {game: game, player: player, choices: choices}); %>
+      </div>
   
-  <div id="resultsscreen">
-    <%- include("results", {}); %>
+      <div id="resultsscreen">
+        <%- include("results", {}); %>
+      </div>
+  
+    </div>
+    <div class="col col-lg-2"></div>
   </div>
 
   <script>
+  
+    var mychoices = [];
+  
     var round;
   
     jQuery(document).ready(function($) {
@@ -80,6 +91,12 @@
       $('#waitingscreen').show();
       var player = "<%= player %>"
       socket.emit('made choice', {player: player, room: gameroom});
+      
+      //new stuff //
+      mychoices.push(choice);
+      //////////////
+      
+      
       round++;
     };
     

@@ -235,6 +235,11 @@ var postChoice = function(req, res) {
 	}
 };
 
+//this is to replace the above function
+var postChoices = function(req, res) {
+	
+};
+
 function writeAndResetChoices() {
 	file.evadeHiderCount[choices.round1-1] = file.evadeHiderCount[choices.round1-1] + 1;
 	file.evadeSeekerCount[choices.round2-1] = file.evadeSeekerCount[choices.round2-1] + 1;
