@@ -25,7 +25,9 @@
     jQuery(document).ready(function($) {
     
       $(".clickable-row").click(function() {
-        window.location.href = "/pod?sid="+$(this).data("sid");
+        $.post('/joinsession', {sid: $(this).data("sid")}, function(data) {
+          window.location.href = "/pod";
+        });
       });
     
       $("#nav-placeholder").load("nav.ejs", function() {

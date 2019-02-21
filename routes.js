@@ -128,72 +128,33 @@ var getCreate = function(req, res) {
 	}
 };
 
+var postJoinSession = function(req, res) {
+	if (req.body.sid) {
+		req.session.currentSID = req.body.sid;
+		//res.redirect('/pod');
+		res.send('done');
+	}
+};
+
 var getPod = function(req, res) {
-	console.log("getting pod");
 	//get sid of clicked on gamesession
 	//keep track of sid in session variable
-	if (req.query.sid) {
-		req.session.currentSID = req.query.sid;
-		res.redirect('/pod');
-	} else if (req.session.round) {
-		console.log(req.session.round);
-		var round = req.session.round;
-		var game = null;
-		var player = null;
-		var page = 'main';
-//		if (round == 1 || round == null) {
-//			choices.round1 = 0;
-//			choices.round2 = 0;
-//			choices.round3 = 0;
-//			choices.round4 = 0;
-//			game = "Evade";
-//			player = "Hider";
-//			req.session.round = 1;
-//		} else if (round == 2) {
-//			game = "Evade";
-//			player = "Seeker";
-//			req.session.round = 2;
-//		} else if (round == 3) {
-//			game = "Find";
-//			player = "Hider";
-//			req.session.round = 3;
-//		} else if (round == 4) {
-//			game = "Find";
-//			player = "Seeker";
-//			req.session.round = 4;
-//		} else if (round == 5) {
-//			page = 'results';
-//			
-//			file.evadeHiderCount[choices.round1-1] = file.evadeHiderCount[choices.round1-1] + 1;
-//			file.evadeSeekerCount[choices.round2-1] = file.evadeSeekerCount[choices.round2-1] + 1;
-//			file.findHiderCount[choices.round3-1] = file.findHiderCount[choices.round3-1] + 1;
-//			file.findSeekerCount[choices.round3-1] = file.findSeekerCount[choices.round3-1] + 1;
-//			
-//			if (choices.round1 == choices.round2) {
-//				file.evadeSeekerScore[choices.round2-1] = file.evadeSeekerScore[choices.round2-1] +1;
-//			} else {
-//				file.evadeHiderScore[choices.round1-1] = file.evadeHiderScore[choices.round1-1] +1;
-//			}
-//			
-//			if (choices.round3 == choices.round4) {
-//				file.findSeekerScore[choices.round3-1] = file.evadeSeekerScore[choices.round3-1] +1;
-//				file.findHiderScore[choices.round3-1] = file.evadeHiderScore[choices.round3-1] +1;
-//			} 
-//			
-//			file.totalGamesPlayed = file.totalGamesPlayed + 1;
-//			
-//			fs.writeFile(fileName, JSON.stringify(file), function (err) {
-//			  if (err) return console.log(err);
-//			  console.log(JSON.stringify(file));
-//			  console.log('writing to ' + fileName);
-//			});
-//		}
-		res.render('pod.ejs', {sid: req.session.currentSID, 
-			game: game, player: player, page: page, choices: choices});
-	} else {
-		req.session.round = 1;
-		res.redirect('/pod');
-	}
+//	if (req.query.sid) {
+//		req.session.currentSID = req.query.sid;
+//		res.redirect('/pod');
+//	} else if (req.session.round) {
+//		console.log(req.session.round);
+//		var round = req.session.round;
+//		var game = null;
+//		var player = null;
+//		var page = 'main';
+//		res.render('pod.ejs', {sid: req.session.currentSID, 
+//			game: game, player: player, page: page, choices: choices});
+//	} else {
+//		req.session.round = 1;
+//		res.redirect('/pod');
+//	}
+	res.render('pod.ejs', {sid: req.session.currentSID, game: null, player: null, page: 'main', choices: choices});
 };
 
 //var getSessions = function(req, res) {
@@ -369,7 +330,8 @@ var routes = {
 	get_data: getData,
 	post_create_session: postCreateSession,
 	get_signup: getSignup,
-	post_create_account: postCreateAccount
+	post_create_account: postCreateAccount,
+	post_join_session: postJoinSession
 };
 
 module.exports = routes;
