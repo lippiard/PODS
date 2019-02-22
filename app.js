@@ -49,7 +49,7 @@ var queue = []; //list of sockets waiting to be matched
 var pairSockets = function(socket, sid, username) {
 	if (queue.length > 0) {
 		var waitingSocket = queue.pop();
-		var room = sid+'#'+waitingSocket.id+'#'+socket.id;
+		var room = sid+'#'+waitingSocket.id+'#'+socket.id; //name rooms as sessionID#socket1#socket2
 		waitingSocket.join(room);
 		socket.join(room);
 		var rnd = Math.random();
@@ -81,11 +81,16 @@ io.on('connection', function(socket) {
 	});
 	
 	socket.on('made choice', function(data) {
+		console.log(socket.rooms);
 		socket.to(data.room).emit('your turn');
 	});
 	
 	socket.on('last round played', function(data) {
 		socket.to(data.room).emit('end game');
+	});
+	
+	socket.on('disconnect', function() {
+		console.log('user disconnected');
 	});
 	
 });
