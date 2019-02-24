@@ -111,7 +111,8 @@ var dbfuncs = {
 		get_sessions: getSessions,
 		get_creator_sessions: getCreatorSessions,
 		create_session: createSession,
-		add_user: addUser
+		add_user: addUser,
+		add_result: addResult
 };
 
 module.exports = dbfuncs;

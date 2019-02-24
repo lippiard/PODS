@@ -34,8 +34,12 @@
   <script>
   
     var socketChoices;
-  
+    var sid = "<%= sid %>";
     var round;
+    var socket = io();
+    var gameroom;
+    var role;
+    var gametype = 'Hide and Seek';
   
     jQuery(document).ready(function($) {
       $("#nav-placeholder").load("nav.ejs", function() {
@@ -50,12 +54,10 @@
       
       round = 1;
       
+      socket.emit('find game room', {sid:sid}); //find game room (pair with one other user in session)
+      
     });
     
-    var socket = io();
-    
-    var gameroom;
-    var role;
     socket.on('start game', function(data) {
       role = data.role;
       gameroom = data.room;
@@ -83,11 +85,7 @@
       if ( historyTraversal ) {
         window.location.href = '/';
       }
-    });
-    
-    var sid = "<%= sid %>"; 
-    socket.emit('join session chat room', {sid: sid}); //join chat for everyone in session
-    socket.emit('find game room', {sid:sid}); //find game room (pair with one other user in session)
+    }); 
     
     var formSubmit = function() {
       var choice = $("input[name='choice']:checked").val();
@@ -133,7 +131,9 @@
       if (data) {
         socketChoices = data.choices;
       }
-      $.post('/postchoices', {choices: socketChoices});
+      if (role === 'Hider') {
+        $.post('/postchoices', {choices: socketChoices, sid: sid, gametype: gametype});
+      }
       //////////////////////
       
       var cs = {round1: 0, round2: 0, round3: 0, round4: 0};

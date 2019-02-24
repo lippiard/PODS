@@ -237,7 +237,28 @@ var postChoice = function(req, res) {
 
 //this is to replace the above function
 var postChoices = function(req, res) {
-	console.log(req.body.choices);
+	var cs = req.body.choices;
+	var ca = [[cs.round1, cs.round2], [cs.round3, cs.round4]];
+	var ra = getHideAndSeekResults(cs);
+	db.add_result(req.body.sid, req.body.gametype, ca, ra, function(err, r) {
+		if (err || !r) {
+			console.log('error adding result');
+		}
+	});
+};
+
+function getHideAndSeekResults(cs) {
+	var rs = [0, 0];
+	if (cs.round1 === cs.round2) {
+		rs[1]+=1;
+	} else {
+		rs[0]+=1;
+	}
+	if (cs.round3 === cs.round2) {
+		rs[0]+=1;
+		rs[1]+=1;
+	}
+	return rs;
 };
 
 function writeAndResetChoices() {
