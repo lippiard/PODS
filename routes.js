@@ -237,7 +237,7 @@ var postChoice = function(req, res) {
 
 //this is to replace the above function
 var postChoices = function(req, res) {
-	
+	console.log(req.body.choices);
 };
 
 function writeAndResetChoices() {
@@ -336,7 +336,8 @@ var routes = {
 	post_create_session: postCreateSession,
 	get_signup: getSignup,
 	post_create_account: postCreateAccount,
-	post_join_session: postJoinSession
+	post_join_session: postJoinSession,
+	post_choices: postChoices
 };
 
 module.exports = routes;

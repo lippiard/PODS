@@ -128,10 +128,14 @@
     });
     
     function endGame(data) {
+    
+      //new stuff //
       if (data) {
         socketChoices = data.choices;
       }
-      console.log(socketChoices);
+      $.post('/postchoices', {choices: socketChoices});
+      //////////////////////
+      
       var cs = {round1: 0, round2: 0, round3: 0, round4: 0};
       $.post('/postchoice', {round: 5}, function(data) {
         cs.round1 = data.choices.round1;
