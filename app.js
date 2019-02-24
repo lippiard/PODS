@@ -67,8 +67,8 @@ var pairSockets = function(socket, sid, username) {
 			role1 = 'Seeker';
 			role2 = 'Hider';
 		}
-		waitingSocket.emit('start game', {role: role1, room: room});
-		socket.emit('start game', {role: role2, room: room});
+		waitingSocket.emit('start game', {role: role1, room: room, choices: {round1: 0, round2: 0, round3: 0, round4: 0}});
+		socket.emit('start game', {role: role2, room: room, choices: {round1: 0, round2: 0, round3: 0, round4: 0}});
 	} else {
 		queue.push({socket: socket, sessionID: sid});
 	}
@@ -86,12 +86,11 @@ io.on('connection', function(socket) {
 	});
 	
 	socket.on('made choice', function(data) {
-		console.log(socket.rooms);
-		socket.to(data.room).emit('your turn');
+		socket.to(data.room).emit('your turn', data);
 	});
 	
 	socket.on('last round played', function(data) {
-		socket.to(data.room).emit('end game');
+		socket.to(data.room).emit('end game', data);
 	});
 	
 	socket.on('disconnect', function() {

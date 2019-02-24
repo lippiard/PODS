@@ -33,7 +33,7 @@
 
   <script>
   
-    var mychoices = [];
+    var socketChoices;
   
     var round;
   
@@ -69,6 +69,11 @@
       $("#matchingscreen").hide();
       $("#playername").html(role);
       $("#gamename").html("Evade");
+      
+      // new stuff //
+      socketChoices = data.choices;
+      ///////////////
+      
     });
     
     window.addEventListener( "pageshow", function ( event ) {
@@ -91,20 +96,20 @@
       $('#playscreen').hide();
       $('#waitingscreen').show();
       var player = "<%= player %>"
-      socket.emit('made choice', {player: player, room: gameroom});
       
-      //new stuff //
-      mychoices.push(choice);
-      //////////////
+      // new stuff //
+      socketChoices['round'+round] = choice;
+      ///////////////
       
-      
+      socket.emit('made choice', {player: player, room: gameroom, choices: socketChoices});
       round++;
     };
     
-    socket.on('your turn', function() {
+    socket.on('your turn', function(data) {
+      socketChoices = data.choices;
       round++;
       if (round > 4) {
-        socket.emit('last round played', {room: gameroom});
+        socket.emit('last round played', {room: gameroom, choices: socketChoices});
         endGame();
       } else {
         if (round == 1 || round == 2) {
@@ -118,11 +123,15 @@
       }
     });
     
-    socket.on('end game', function() {
-      endGame();
+    socket.on('end game', function(data) {
+      endGame(data);
     });
     
-    function endGame() {
+    function endGame(data) {
+      if (data) {
+        socketChoices = data.choices;
+      }
+      console.log(socketChoices);
       var cs = {round1: 0, round2: 0, round3: 0, round4: 0};
       $.post('/postchoice', {round: 5}, function(data) {
         cs.round1 = data.choices.round1;
