@@ -1,26 +1,33 @@
 {
-	"name": "PODS",
-	"description": "ESE Senior Design 2018-19 Team 19",
-	"version": "0.1",
-	"scripts": {
-		"start": "node app.js"
-	},
-	"dependencies": {
-		"async": "*",
-		"aws-sdk": "^2.399.0",
-		"body-parser": "*",
-		"cjs": "0.0.11",
-		"crypto-js": "^3.1.9-1",
-		"ejs": "^2.6.1",
-		"express": "*",
-		"express-session": "^1.15.6",
-		"fs": "*",
-		"joi": "^14.3.1",
-		"jquery": "^3.3.1",
-		"json": "^9.0.6",
-		"plotly": "^1.0.6",
-		"socket.io": "^2.2.0",
-		"uuid": "^3.3.2",
-		"vogels": "^2.2.0"
-	}
+  "name": "pds",
+  "version": "1.0.0",
+  "description": "ESE Senior Design Team 19",
+  "main": "app.js",
+  "dependencies": {
+    "cookie-session": "^2.0.0-beta.3",
+    "cookie-parser": "^1.4.3",
+    "crypto-js": "^3.1.9-1",
+    "ejs": "^2.6.1",
+    "express-session": "^1.15.6",
+    "express": "^4.16.4",
+    "joi": "^14.3.1",
+    "plotly": "^1.0.6",
+    "socket.io": "^2.2.0",
+    "vogels": "^2.2.0",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lippiard/PODS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lippiard/PODS/issues"
+  },
+  "homepage": "https://github.com/lippiard/PODS#readme"
 }
