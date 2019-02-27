@@ -21,12 +21,12 @@ var exists = function(table, key, callback){
 	});
 };
 
-var addUser = function(email, password, callback) {
+var addUser = function(email, password, nickname, callback) {
 	exists('usersTable', email, function(exists_err, result) {
 		if (exists_err) {
 			callback(err, null);
 		} else if (!result) {
-			var newuser = {email: email, userID: uuid(), password: SHA3(password).toString()};
+			var newuser = {email: email, userID: uuid(), password: SHA3(password).toString(), nickname: nickname};
 			schemas.usersTable.create(newuser, function(err, u) {
 				if (err || !u) {
 					callback(err, null);
@@ -95,6 +95,17 @@ var addResult = function(sessionid, gametype, choices, results, callback) {
 	});
 };
 
+var getSessionResults = function(sessionid, callback) {
+	schemas.resultsTable.query(sessionid).exec(function(err, r) {
+		if (err || !r) {
+			callback(err, null);
+		} else {
+			let rs = r.Items.map(ri => ri.attrs);
+			callback(null, rs);
+		}
+	});
+};
+
 var createSession = function(gametype, sessionname, privateSession, creatorid, creatornick, password, callback) {
 	var newSession = {sessionid: uuid(), gametype: gametype, sessionname: sessionname, privateSession: privateSession, creator: creatorid, creatornick: creatornick, password: password};
 	schemas.sessionsTable.create(newSession, function(err, s) {
@@ -112,7 +123,8 @@ var dbfuncs = {
 		get_creator_sessions: getCreatorSessions,
 		create_session: createSession,
 		add_user: addUser,
-		add_result: addResult
+		add_result: addResult,
+		get_results: getSessionResults
 };
 
 module.exports = dbfuncs;

@@ -41,8 +41,8 @@ var Session = vogels.define('Session', {
 
 //currently experimenting with making nrows = number players and ncols = number of choices per player
 var Result = vogels.define('Result', {
-	hashKey: 'resultid',
-	rangeKey: 'sessionid',
+	hashKey: 'sessionid',
+	rangeKey: 'resultid',
 	timestamps: true,
 	schema: {
 		resultid: vogels.types.uuid(),
@@ -92,7 +92,7 @@ module.exports = schemas;
 //		console.log(err);
 //	} else {
 //      var id = uuid();
-//		var user = {email: 'user@user.com', userID: id, password: SHA3('password').toString(), nickname: 'Steve'};
+//		var user = {email: 'user@user.com', userID: id, password: SHA3('password').toString(), nickname: 'Test user'};
 //		User.create(user, function(err, u){
 //			if (err) {
 //				console.log(err);
@@ -103,7 +103,7 @@ module.exports = schemas;
 //		
 //		var sessionid = uuid();
 //		
-//		var session = {sessionid: sessionid, gametype:'Hide and Seek', sessionname: 'test hns', privateSession: true, creator: id, creatornick: 'Steve', password: SHA3('game pass').toString()};
+//		var session = {sessionid: sessionid, gametype:'Hide and Seek', sessionname: 'test hns', privateSession: true, creator: id, creatornick: 'Test user', password: SHA3('game pass').toString()};
 //		Session.create(session, function(err, s) {
 //			if (err) {
 //				console.log(err);

@@ -12,6 +12,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "joi": "^14.3.1",
+    "jquery.redirect": "^1.1.4",
     "plotly": "^1.0.6",
     "socket.io": "^2.2.0",
     "uuid": "^3.3.2",

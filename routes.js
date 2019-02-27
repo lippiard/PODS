@@ -67,9 +67,10 @@ var postCreateAccount = function(req, res) {
 	userInput = req.body.usernameInput;
 	passInput1 = req.body.passwordInput;
 	passInput2 = req.body.verifyPasswordInput;
+	nickInput = req.body.nicknameInput;
 	if (userInput && passInput1 && passInput2) {
 		if (passInput1 === passInput2) {
-			db.add_user(userInput, passInput1, function(err, u) {
+			db.add_user(userInput, passInput1, nickInput, function(err, u) {
 				if (err || !u) {
 					if (err === 'user already exists') {
 						res.redirect('/signup?err=3');
@@ -247,6 +248,7 @@ var postChoices = function(req, res) {
 	});
 };
 
+//used for above, probably want to change later
 function getHideAndSeekResults(cs) {
 	var rs = [0, 0];
 	if (cs.round1 === cs.round2) {
@@ -260,6 +262,14 @@ function getHideAndSeekResults(cs) {
 	}
 	return rs;
 };
+
+var postDataSID = function(req, res) {
+	if (req.body.sid) {
+		req.session.dataSID = req.body.sid;
+		console.log(req.session.dataSID);
+		res.send('done');
+	}
+}
 
 function writeAndResetChoices() {
 	file.evadeHiderCount[choices.round1-1] = file.evadeHiderCount[choices.round1-1] + 1;
@@ -320,8 +330,16 @@ var getData = function(req, res) {
 	if (!req.session.loggedIn) {
 		res.redirect('/login');
 	} else {
+//		db.get_results(req.session.dataSID, function(err, data) {
+//			if (err || !data) {
+//				console.log('error getting session results');
+//			} else {
+//				res.render('data.ejs', {plots: ["//plot.ly/~team19/190.embed", "//plot.ly/~team19/188.embed",
+//					"//plot.ly/~team19/189.embed", "//plot.ly/~team19/194.embed"], data: data)});
+//			}
+//		})
 		res.render('data.ejs', {plots: ["//plot.ly/~team19/190.embed", "//plot.ly/~team19/188.embed",
-			"//plot.ly/~team19/189.embed", "//plot.ly/~team19/194.embed"]}); 
+			"//plot.ly/~team19/189.embed", "//plot.ly/~team19/194.embed"], sid: req.session.dataSID}); 
 	}
 };
 
@@ -358,7 +376,8 @@ var routes = {
 	get_signup: getSignup,
 	post_create_account: postCreateAccount,
 	post_join_session: postJoinSession,
-	post_choices: postChoices
+	post_choices: postChoices,
+	post_data_sid: postDataSID
 };
 
 module.exports = routes;

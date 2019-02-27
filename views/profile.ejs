@@ -33,7 +33,9 @@
       });
       
       $(".clickable-row").click(function() {
-        window.location.href = "/data";
+        $.post('/joindatasession', {sid: $(this).data("sid")}, function(data) {
+          window.location.href = "/data";
+        });
       });
       
     });
