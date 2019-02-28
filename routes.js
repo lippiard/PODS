@@ -263,10 +263,10 @@ function getHideAndSeekResults(cs) {
 	return rs;
 };
 
+//just for setting session data sid variable (in case user refreshes data page while having two different data pages open)
 var postDataSID = function(req, res) {
 	if (req.body.sid) {
 		req.session.dataSID = req.body.sid;
-		console.log(req.session.dataSID);
 		res.send('done');
 	}
 }
@@ -330,16 +330,21 @@ var getData = function(req, res) {
 	if (!req.session.loggedIn) {
 		res.redirect('/login');
 	} else {
-//		db.get_results(req.session.dataSID, function(err, data) {
-//			if (err || !data) {
-//				console.log('error getting session results');
-//			} else {
-//				res.render('data.ejs', {plots: ["//plot.ly/~team19/190.embed", "//plot.ly/~team19/188.embed",
-//					"//plot.ly/~team19/189.embed", "//plot.ly/~team19/194.embed"], data: data)});
-//			}
-//		})
-		res.render('data.ejs', {plots: ["//plot.ly/~team19/190.embed", "//plot.ly/~team19/188.embed",
-			"//plot.ly/~team19/189.embed", "//plot.ly/~team19/194.embed"], sid: req.session.dataSID}); 
+//		res.render('data.ejs', {plots: ["//plot.ly/~team19/190.embed", "//plot.ly/~team19/188.embed",
+//			"//plot.ly/~team19/189.embed", "//plot.ly/~team19/194.embed"], sid: req.session.dataSID}); 
+		res.render('HideAndSeek_data.ejs', {sid: req.session.dataSID});
+	}
+};
+
+var postFetchResults = function(req, res) {
+	if (req.body.sid) {
+		db.get_results(req.body.sid, function(err, data) {
+			if (err || !data) {
+				res.send('could not fetch data');
+			} else {
+				res.send(data);
+			}
+		});
 	}
 };
 
@@ -377,7 +382,8 @@ var routes = {
 	post_create_account: postCreateAccount,
 	post_join_session: postJoinSession,
 	post_choices: postChoices,
-	post_data_sid: postDataSID
+	post_data_sid: postDataSID,
+	post_fetch_results: postFetchResults
 };
 
 module.exports = routes;

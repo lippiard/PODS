@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  
+  <style>
+  </style>
+  
+  
+</head>
+<body>
+  <div id="nav-placeholder">
+  </div>
+  
+  <div id="sid-check">
+    <%= sid %>
+  </div>
+  
+  <div id="test-data">
+  </div>
+  
+  <div id="data-frame" class="container">
+    <div class="col">
+    </div>
+    
+    <div class="col-10">
+      <div class="row">
+        <div class="col">
+          <canvas id="chart1"></canvas>
+        </div>
+        
+        <div class="col">
+          <canvas id="chart2"></canvas>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col">
+          <canvas id="chart3"></canvas>
+        </div>
+        
+        <div class="col">
+          <canvas id="chart4"></canvas>
+        </div>
+      
+      </div>
+    </div>
+    
+    <div class="col">
+    </div>
+  </div>
+
+  <script>
+    
+    var sid;
+    var data;
+    
+    jQuery(document).ready(function($) {
+      $("#nav-placeholder").load("nav.ejs", function() {
+        $(".nav").find(".active").removeClass("active");
+        $("#profilelink").addClass("active");
+      });
+      
+      sid = '<%= sid %>';
+      
+      // this changes the session variable to sid from this page
+      // needed for if user refreshes page
+      $(window).bind('beforeunload', function() {
+        $.post('/joindatasession', {sid: sid}, function(data) {       
+        });
+      });
+      
+      $.post('/fetchresults', {sid: sid}, function(data) {
+        $('#test-data').html(JSON.stringify(data));
+        fillCharts();
+      });
+      
+    });
+    
+    
+    function fillCharts() {
+      var ctx1 = $('#chart1')[0].getContext('2d');
+      var chart1 = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: [0, 1, 2, 3, 4, 5],
+          datasets: [{data: [0, 1, 2, 3, 4, 5]}]
+        }
+      });
+      
+      var ctx2 = $('#chart2')[0].getContext('2d');
+      var chart2 = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: [0, 1, 2, 3, 4, 5],
+          datasets: [{data: [0, 1, 2, 3, 4, 5]}]
+        }
+      });
+      
+      var ctx3 = $('#chart3')[0].getContext('2d');
+      var chart3 = new Chart(ctx3, {
+        type: 'bar',
+        data: {
+          labels: [0, 1, 2, 3, 4, 5],
+          datasets: [{data: [0, 1, 2, 3, 4, 5]}]
+        }
+      });
+      
+      var ctx4 = $('#chart4')[0].getContext('2d');
+      var chart4 = new Chart(ctx4, {
+        type: 'bar',
+        data: {
+          labels: [0, 1, 2, 3, 4, 5],
+          datasets: [{data: [0, 1, 2, 3, 4, 5]}]
+        }
+      });
+    }
+    
+  </script> 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>
