@@ -56,6 +56,13 @@
       
       socket.emit('find game room', {sid:sid}); //find game room (pair with one other user in session)
       
+      // tell server when user leaves/refreshes page
+      $(window).bind('beforeunload', function() {
+        $.post('/leavesession',function(data) { 
+          socket.emit('leave queue', {sid: sid});     
+        });
+      });
+      
     });
     
     socket.on('start game', function(data) {

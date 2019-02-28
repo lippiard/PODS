@@ -72,21 +72,29 @@
         });
       });
       
-      $.post('/fetchresults', {sid: sid}, function(data) {
+      $.post('/fetchresults', {sid: sid}, function(d) {
+        data = d;
         $('#test-data').html(JSON.stringify(data));
-        fillCharts();
+        fillCharts(d);
       });
       
     });
     
     
-    function fillCharts() {
+    function fillCharts(d) {
+      numWins(0,0);
       var ctx1 = $('#chart1')[0].getContext('2d');
       var chart1 = new Chart(ctx1, {
         type: 'bar',
         data: {
           labels: [0, 1, 2, 3, 4, 5],
           datasets: [{data: [0, 1, 2, 3, 4, 5]}]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Evade Round Win Rate'
+          }
         }
       });
       
@@ -96,6 +104,12 @@
         data: {
           labels: [0, 1, 2, 3, 4, 5],
           datasets: [{data: [0, 1, 2, 3, 4, 5]}]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Evade Round Choice Counts'
+          }
         }
       });
       
@@ -105,6 +119,12 @@
         data: {
           labels: [0, 1, 2, 3, 4, 5],
           datasets: [{data: [0, 1, 2, 3, 4, 5]}]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Find Round Win Rate'
+          }
         }
       });
       
@@ -114,8 +134,29 @@
         data: {
           labels: [0, 1, 2, 3, 4, 5],
           datasets: [{data: [0, 1, 2, 3, 4, 5]}]
+        }, 
+        options: {
+          title: {
+            display: true,
+            text: 'Find Round Choice Counts'
+          }
         }
       });
+    }
+    
+    // player=0 for hider, player=1 for seeker
+    // round=0 for evade, round=1 for find
+    function numWins(player, round) {
+      var n = data.length;
+      let cs = data.map(di => di.choices[round]);
+      console.log(cs);
+    }
+    
+    // same as above for player
+    // strategy is 1,2,3,4 for boxes
+    // round=0 for evade, round=1 for find
+    function numChosen(player, strategy, round) {
+    
     }
     
   </script> 

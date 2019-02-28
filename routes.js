@@ -97,6 +97,7 @@ var getHome = function(req, res) {
 	if (!req.session.loggedIn) {
 		res.redirect('/login');
 	} else {
+		req.session.currentSID = null;
 		//get all game sessions from database, send array to home.ejs
 		db.get_sessions(function(err, data) {
 			req.session.round = 1;
@@ -136,6 +137,11 @@ var postJoinSession = function(req, res) {
 		res.send('done');
 	}
 };
+
+var postLeaveSession = function(req, res) {
+	req.session.currentSID = null;
+	res.send('done');
+}
 
 var getPod = function(req, res) {
 	//get sid of clicked on gamesession
@@ -383,7 +389,8 @@ var routes = {
 	post_join_session: postJoinSession,
 	post_choices: postChoices,
 	post_data_sid: postDataSID,
-	post_fetch_results: postFetchResults
+	post_fetch_results: postFetchResults,
+	post_leave_session: postLeaveSession
 };
 
 module.exports = routes;

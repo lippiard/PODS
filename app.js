@@ -45,6 +45,7 @@ app.post('/joinsession', routes.post_join_session);
 app.post('/postchoices', routes.post_choices);
 app.post('/joindatasession', routes.post_data_sid);
 app.post('/fetchresults', routes.post_fetch_results);
+app.post('/leavesession', routes.post_leave_session);
 
 var queue = []; //list of sockets waiting to be matched
 
@@ -94,6 +95,13 @@ io.on('connection', function(socket) {
 	
 	socket.on('last round played', function(data) {
 		socket.to(data.room).emit('end game', data);
+	});
+	
+	socket.on('leave queue', function(data) {
+		console.log(queue);
+		if (queue.length > 0) {
+			queue = queue.filter(item => (item.socket.id === socket.id) && (data.sid === data.sessionID));
+		}
 	});
 	
 	socket.on('disconnect', function() {
