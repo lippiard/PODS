@@ -57,6 +57,9 @@ var pairSockets = function(socket, sid, username) {
 		}
 	});
 	if (waiting) {
+		//remove waiting from queue
+		queue = queue.filter(item => !((item.socket.id === waiting.socket.id) && (sid === item.sessionID)));
+		
 		var waitingSocket = waiting.socket;
 		var room = sid+'#'+waitingSocket.id+'#'+socket.id; //name rooms as sessionID#socket1#socket2
 		waitingSocket.join(room);
@@ -98,9 +101,8 @@ io.on('connection', function(socket) {
 	});
 	
 	socket.on('leave queue', function(data) {
-		console.log(queue);
 		if (queue.length > 0) {
-			queue = queue.filter(item => (item.socket.id === socket.id) && (data.sid === data.sessionID));
+			queue = queue.filter(item => !((item.socket.id === socket.id) && (data.sid === item.sessionID)));
 		}
 	});
 	
