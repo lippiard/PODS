@@ -27,6 +27,15 @@
     
     <div class="col-10">
       <div class="row">
+        <div class="col-2">
+        </div>
+        <div class="col-8">
+        <canvas id="chart0"></canvas>
+        </div>
+        <div class="col-2">
+        </div>
+      </div>
+      <div class="row">
         <div class="col">
           <canvas id="chart1"></canvas>
         </div>
@@ -82,13 +91,54 @@
     
     
     function fillCharts(d) {
-      numWins(0,0);
+      var ctx0 = $('#chart0')[0].getContext('2d');
+      var chart0 = new Chart(ctx0, {
+        type: 'doughnut',
+        data: {
+          labels: ['Hider', 'Seeker'],
+          datasets: [{
+                       backgroundColor: ['rgb(0, 230, 191)', 'rgb(255, 204, 153)'],
+                       data: totalWinRates()
+                    }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Overall Win Rate'
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                min: 0,
+                max: 1
+              }
+            }]
+          },
+          animation: {
+            animateScale: true
+          }
+        }
+      });
+      
+      
+      var evadeWRs = winRateByRound(0);
       var ctx1 = $('#chart1')[0].getContext('2d');
       var chart1 = new Chart(ctx1, {
         type: 'bar',
         data: {
-          labels: [0, 1, 2, 3, 4, 5],
-          datasets: [{data: [0, 1, 2, 3, 4, 5]}]
+          labels: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
+          datasets: [
+                      {
+                        label: 'Hider',
+                        backgroundColor: 'rgb(0, 230, 191)',
+                        data: evadeWRs[0]
+                      },
+                      {
+                        label: 'Seeker',
+                        backgroundColor: 'rgb(255, 204, 153)',
+                        data: evadeWRs[1]
+                      }
+                    ]
         },
         options: {
           title: {
@@ -102,8 +152,19 @@
       var chart2 = new Chart(ctx2, {
         type: 'bar',
         data: {
-          labels: [0, 1, 2, 3, 4, 5],
-          datasets: [{data: [0, 1, 2, 3, 4, 5]}]
+          labels: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
+          datasets: [
+                      {
+                        label: 'Hider',
+                        backgroundColor: 'rgb(0, 230, 191)',
+                        data: numChosen(0,0)
+                      },
+                      {
+                        label: 'Seeker',
+                        backgroundColor: 'rgb(255, 204, 153)',
+                        data: numChosen(1,0)
+                      }
+                    ]
         },
         options: {
           title: {
@@ -113,12 +174,24 @@
         }
       });
       
+      var findWRs = winRateByRound(1);
       var ctx3 = $('#chart3')[0].getContext('2d');
       var chart3 = new Chart(ctx3, {
         type: 'bar',
         data: {
-          labels: [0, 1, 2, 3, 4, 5],
-          datasets: [{data: [0, 1, 2, 3, 4, 5]}]
+          labels: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
+          datasets: [
+                      {
+                        label: 'Hider',
+                        backgroundColor: 'rgb(0, 230, 191)',
+                        data: findWRs[0]
+                      },
+                      {
+                        label: 'Seeker',
+                        backgroundColor: 'rgb(255, 204, 153)',
+                        data: findWRs[1]
+                      }
+                    ]
         },
         options: {
           title: {
@@ -132,8 +205,19 @@
       var chart4 = new Chart(ctx4, {
         type: 'bar',
         data: {
-          labels: [0, 1, 2, 3, 4, 5],
-          datasets: [{data: [0, 1, 2, 3, 4, 5]}]
+          labels: ['Box 1', 'Box 2', 'Box 3', 'Box 4'],
+          datasets: [
+                      {
+                        label: 'Hider',
+                        backgroundColor: 'rgb(0, 230, 191)',
+                        data: numChosen(0,1)
+                      },
+                      {
+                        label: 'Seeker',
+                        backgroundColor: 'rgb(255, 204, 153)',
+                        data: numChosen(1,1)
+                      }
+                    ]
         }, 
         options: {
           title: {
@@ -144,18 +228,62 @@
       });
     }
     
-    // player=0 for hider, player=1 for seeker
     // round=0 for evade, round=1 for find
-    function numWins(player, round) {
+    // returns two four-element lists, win rate for each player for each box
+    function winRateByRound(round) {
       let cs = data.map(di => di.choices[round]);
-      
+      var n = cs.length;
+      var wins = [[0,0,0,0],[0,0,0,0]]; //wins for each player for each box
+      for (var i = 0; i < cs.length; i++) {
+        if (cs[i][0] === cs[i][1]) {
+          if (round == 0) {
+            wins[1][cs[i][1]-1]++;
+          } else {
+            wins[0][cs[i][0]-1]++;
+            wins[1][cs[i][1]-1]++;
+          }
+        } else {
+          if (round == 0) {
+            wins[0][cs[i][0]-1]++;
+          }
+        }
+      }
+      var ncs = [numChosen(0,round), numChosen(1, round)];
+      for (var i = 0; i < 2; i++) {
+        for (var j = 0; j < 4; j++) {
+          if (ncs[i][j] != 0) {
+            wins[i][j] = wins[i][j]/ncs[i][j];
+          }
+        }
+      }
+      return wins;
+    }
+    
+    function totalWinRates() {
+      let rs = data.map(di => di.results);
+      var n = rs.length;
+      var hiderWins = 0;
+      var seekerWins = 0;
+      for (var i = 0; i < rs.length; i++) {
+        if (rs[i][0] > rs[i][1]) {
+          hiderWins++;
+        } else if (rs[i][0] < rs[i][1]) {
+          seekerWins++;
+        } 
+      }
+      return [hiderWins/n, seekerWins/n];
     }
     
     // same as above for player
-    // strategy is 1,2,3,4 for boxes
     // round=0 for evade, round=1 for find
-    function numChosen(player, strategy, round) {
-    
+    // returns list of counts for boxes 1,2,3,4
+    function numChosen(player, round) {
+      let cs = data.map(di => di.choices[round][player]);
+      var totals = [0,0,0,0];
+      for (var i = 0; i < cs.length; i++) {
+        totals[cs[i]-1]++;
+      }
+      return totals;
     }
     
   </script> 
