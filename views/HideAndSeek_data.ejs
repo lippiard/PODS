@@ -15,49 +15,32 @@
   </div>
   
   <div id="sid-check">
-    <%= sid %>
   </div>
   
   <div id="test-data">
   </div>
   
   <div id="data-frame" class="container">
-    <div class="col">
-    </div>
-    
-    <div class="col-10">
-      <div class="row">
-        <div class="col-2">
-        </div>
-        <div class="col-8">
+    <div class="row">
+      <div class="col-4">
         <canvas id="chart0"></canvas>
-        </div>
-        <div class="col-2">
+      </div>
+      <div class="col-8">
+        <div class="row h-100">
+          <div class="col-6 h-50">
+            <canvas id="chart1"></canvas>
+          </div>
+          <div class="col-6 h-50">
+            <canvas id="chart2"></canvas>
+          </div>
+          <div class="col-6 h-50">
+            <canvas id="chart3"></canvas>
+          </div>
+          <div class="col-6 h-50">
+            <canvas id="chart4"></canvas>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <canvas id="chart1"></canvas>
-        </div>
-        
-        <div class="col">
-          <canvas id="chart2"></canvas>
-        </div>
-      </div>
-      
-      <div class="row">
-        <div class="col">
-          <canvas id="chart3"></canvas>
-        </div>
-        
-        <div class="col">
-          <canvas id="chart4"></canvas>
-        </div>
-      
-      </div>
-    </div>
-    
-    <div class="col">
     </div>
   </div>
 
@@ -73,6 +56,7 @@
       });
       
       sid = '<%= sid %>';
+      //$('#sid-check').html(sid);
       
       // this changes the session variable to sid from this page
       // needed for if user refreshes page
@@ -83,7 +67,7 @@
       
       $.post('/fetchresults', {sid: sid}, function(d) {
         data = d;
-        $('#test-data').html(JSON.stringify(data));
+        //$('#test-data').html(JSON.stringify(data));
         fillCharts(d);
       });
       
