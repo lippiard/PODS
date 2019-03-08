@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head> 
+  <script src="http://underscorejs.org/underscore-min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -31,8 +32,7 @@
         </div>
       </div>
       <div class="col-xs-12 col-lg-8">
-        <div id="test-dates">
-        </div>
+        <canvas id="volChart"></canvas>
       </div>
     </div>
     <div class="row">
@@ -96,7 +96,9 @@
             plural = 's';
           }
           
-          $('#test-num').html('This game has been played '+data.length+' time'+plural+'!');
+          //$('#test-num').html('This game has been played '+data.length+' time'+plural+'!');
+          //$('#test-dates').html(playsByDay());
+          
           fillCharts(d);
         }
       });
@@ -232,6 +234,22 @@
           }
         }
       });
+      
+      var volume = playsByDay();
+      var volCtx = $('#volChart')[0].getContext('2d');
+      var volChart = new Chart(volCtx, {
+        type: 'line',
+        data: {
+          labels: volume[0],
+          datasets: [
+            {
+              label: 'Volume',
+              backgroundColor: 'rgb(0, 230, 191)',
+              data: volume[1]
+            }
+          ]
+        }
+      });
     }
     
     // round=0 for evade, round=1 for find
@@ -295,6 +313,30 @@
     function pickRates(player, round) {
       var cs = numChosen(player,round);
       return cs.map(ci => ci/data.length);
+    }
+    
+    function playsByDay() {
+      let dates = data.map(di => new Date(di.createdAt));
+      dates.sort(function(a,b) {
+        return a - b;
+      });
+      let dateStrings = dates.map(di => di.toDateString().substring(4));
+      return getUniqAndCounts(dateStrings);
+    }
+    
+    // this only works if arr is sorted
+    function getUniqAndCounts(arr) {
+      var uniq = [], counts = [], prev;
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] !== prev) {
+          uniq.push(arr[i]);
+          counts.push(1);
+        } else {
+          counts[counts.length-1]++;
+        }
+        prev = arr[i];
+      }
+      return [uniq, counts];
     }
     
   </script> 
