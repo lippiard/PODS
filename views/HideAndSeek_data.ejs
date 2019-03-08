@@ -20,7 +20,21 @@
   <div id="test-data">
   </div>
   
+  <div id="no-plays-screen">
+    No one has played this game yet!
+  </div>
+  
   <div id="data-frame" class="container">
+    <div class="row">
+      <div class="col-xs-6 col-lg-4">
+        <div id="test-num">
+        </div>
+      </div>
+      <div class="col-xs-12 col-lg-8">
+        <div id="test-dates">
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-xs-6 col-lg-4">
         <canvas id="chart0"></canvas>
@@ -60,6 +74,8 @@
       sid = '<%= sid %>';
       //$('#sid-check').html(sid); //use this for testing
       
+      $('#no-plays-screen').hide();
+      
       // this changes the session variable to sid from this page
       // needed for if user refreshes page
       $(window).bind('beforeunload', function() {
@@ -69,8 +85,20 @@
       
       $.post('/fetchresults', {sid: sid}, function(d) {
         data = d;
-        //$('#test-data').html(JSON.stringify(data)); //use this for testing
-        fillCharts(d);
+        if (data.length <= 0) {
+          $('#no-plays-screen').show();
+          $('#data-frame').hide();
+        } else {
+          $('#test-data').html(JSON.stringify(data)); //use this for testing
+          
+          var plural = '';
+          if (data.length > 1) {
+            plural = 's';
+          }
+          
+          $('#test-num').html('This game has been played '+data.length+' time'+plural+'!');
+          fillCharts(d);
+        }
       });
       
     });
@@ -135,19 +163,19 @@
                       {
                         label: 'Hider',
                         backgroundColor: 'rgb(0, 230, 191)',
-                        data: numChosen(0,0)
+                        data: pickRates(0,0)
                       },
                       {
                         label: 'Seeker',
                         backgroundColor: 'rgb(255, 204, 153)',
-                        data: numChosen(1,0)
+                        data: pickRates(1,0)
                       }
                     ]
         },
         options: {
           title: {
             display: true,
-            text: 'Evade Round Choice Counts'
+            text: 'Evade Round Pick Rates'
           }
         }
       });
@@ -188,19 +216,19 @@
                       {
                         label: 'Hider',
                         backgroundColor: 'rgb(0, 230, 191)',
-                        data: numChosen(0,1)
+                        data: pickRates(0,1)
                       },
                       {
                         label: 'Seeker',
                         backgroundColor: 'rgb(255, 204, 153)',
-                        data: numChosen(1,1)
+                        data: pickRates(1,1)
                       }
                     ]
         }, 
         options: {
           title: {
             display: true,
-            text: 'Find Round Choice Counts'
+            text: 'Find Round Pick Rates'
           }
         }
       });
@@ -262,6 +290,11 @@
         totals[cs[i]-1]++;
       }
       return totals;
+    }
+    
+    function pickRates(player, round) {
+      var cs = numChosen(player,round);
+      return cs.map(ci => ci/data.length);
     }
     
   </script> 
