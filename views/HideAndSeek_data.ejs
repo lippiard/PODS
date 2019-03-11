@@ -2,6 +2,7 @@
 <html>
 <head> 
   <script src="http://underscorejs.org/underscore-min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -89,14 +90,14 @@
           $('#no-plays-screen').show();
           $('#data-frame').hide();
         } else {
-          $('#test-data').html(JSON.stringify(data)); //use this for testing
+          //$('#test-data').html(JSON.stringify(data)); //use this for testing
           
           var plural = '';
           if (data.length > 1) {
             plural = 's';
           }
           
-          //$('#test-num').html('This game has been played '+data.length+' time'+plural+'!');
+          $('#test-num').html('This game has been played '+data.length+' time'+plural+'!');
           //$('#test-dates').html(playsByDay());
           
           fillCharts(d);
@@ -236,19 +237,34 @@
       });
       
       var volume = playsByDay();
+      console.log(volume);
       var volCtx = $('#volChart')[0].getContext('2d');
       var volChart = new Chart(volCtx, {
         type: 'line',
         data: {
-          labels: volume[0],
+          //labels: volume[0],
           datasets: [
             {
               label: 'Volume',
               backgroundColor: 'rgb(0, 230, 191)',
-              data: volume[1]
+              data: volume,
+              fill: false
             }
           ]
+        },
+        options: {
+        scales: {
+            xAxes: [{
+              type: 'time',
+              distribution: 'linear'
+            }],
+            yAxes: [{
+              ticks: {
+                min: 0
+              }
+            }]
         }
+    }
       });
     }
     
@@ -329,6 +345,17 @@
       var uniq = [], counts = [], prev;
       for (var i = 0; i < arr.length; i++) {
         if (arr[i] !== prev) {
+          //when i > 0, check if arr[i] is more than one day past arr[i-1]
+          //if so, push dates in between to uniq and push 0 to counts
+          if (i > 0) {
+            var endDate = new Date(arr[i]), startDate = new Date(arr[i-1]);
+            if (endDate - startDate > 1) {
+              pushZerosInBetween(startDate, endDate, uniq, counts, function(dateArr, countArr) {
+                uniq = dateArr;
+                counts = countArr;
+              });
+            }
+          }
           uniq.push(arr[i]);
           counts.push(1);
         } else {
@@ -336,7 +363,24 @@
         }
         prev = arr[i];
       }
-      return [uniq, counts];
+      
+      function pushZerosInBetween(startDate, endDate, dateArr, countArr, callback) {
+        var d = startDate;
+        d.setDate(d.getDate() + 1);
+        while (d < endDate) {
+          dateArr.push(d.toDateString().substring(4));
+          countArr.push(0);
+          d.setDate(d.getDate() + 1);
+        }
+        callback(dateArr, countArr);
+      }
+      
+      var result = [];
+      for (var i = 0; i < uniq.length; i++) {
+        result.push({x: uniq[i], y: counts[i]});
+      }
+      
+      return result;
     }
     
   </script> 
