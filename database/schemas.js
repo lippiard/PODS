@@ -25,7 +25,6 @@ var User = vogels.define('User', {
 
 var Session = vogels.define('Session', {
 	hashKey: 'sessionid',
-	rangeKey: 'gametype',
 	timestamps: true,
 	schema: {
 		sessionid: vogels.types.uuid(),

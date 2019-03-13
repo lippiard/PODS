@@ -3,6 +3,7 @@
 <head> 
   <script src="ejs.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.8.0/sha3.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   
   <style>
@@ -20,14 +21,45 @@
   <div id="content">
     <% include table %>
   </div>
-
+  
+  <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="passwordModalTitle">Enter session password</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label for="passwordInput">Password</label>
+          <input type="password" class="form-control" name="passwordInput" id="passwordInput" placeholder="Password">       
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Submit</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
   <script>
     jQuery(document).ready(function($) {
     
       $(".clickable-row").click(function() {
-        $.post('/joinsession', {sid: $(this).data("sid")}, function(data) {
-          window.location.href = "/pod";
+        $.post('/fetchsessiondetails', {sid: $(this).data("sid")}, function(s) {
+          if (s.privateSession) {
+            $('#passwordInput').val('');
+            $('#passwordModal').modal();
+          } else {
+            joinSession(s.sessionid, null);
+          }
         });
+        
+        //$.post('/joinsession', {sid: $(this).data("sid")}, function(data) {
+          //window.location.href = "/pod";
+        //});
       });
     
       $("#nav-placeholder").load("nav.ejs", function() {
@@ -36,6 +68,12 @@
       });
       
     });
+    
+    function joinSession(sid, passwordInput) {
+      $.post('/joinsession', {sid: sid}, function(data) {
+        window.location.href = "/pod";
+      });
+    }
   </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

@@ -3,7 +3,7 @@
       <tr>
         <th scope="col">Session Name</th>
         <th scope="col">Type</th>
-        <th scope="col">Private</th>
+        <th scope="col">Access</th>
         <th scope="col">Creator</th>
       </tr>
     </thead>
@@ -12,7 +12,7 @@
         <tr class="clickable-row" data-sid=<%= sessions[i].sessionid %>>
           <th scope="row"><%= sessions[i].sessionname %></th>
           <td><%= sessions[i].gametype %></td>
-          <td><%= sessions[i].privateSession %></td>
+          <td><%= (sessions[i].privateSession ? 'Private' : 'Public') %></td>
           <td><%= sessions[i].creatornick %></td>
         </tr>
       <% } %>

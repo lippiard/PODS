@@ -369,6 +369,18 @@ var postCreateSession = function(req, res) {
 	}
 };
 
+var postFetchSessionDetails = function(req, res) {
+	var id = req.body.sid;
+	db.get_session_by_id(id, function(err, s) {
+		if (err || !s) {
+			console.log(err);
+			res.send('could not fetch session');
+		} else {
+			res.send(s);
+		}
+	});
+};
+
 
 var routes = {
 	//get_main: getMain,
@@ -390,7 +402,8 @@ var routes = {
 	post_choices: postChoices,
 	post_data_sid: postDataSID,
 	post_fetch_results: postFetchResults,
-	post_leave_session: postLeaveSession
+	post_leave_session: postLeaveSession,
+	post_fetch_session_details: postFetchSessionDetails
 };
 
 module.exports = routes;

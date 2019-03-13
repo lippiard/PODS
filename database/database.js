@@ -72,6 +72,16 @@ var getSessions = function(callback) {
 	});
 };
 
+var getSessionByID = function(sid, callback) {
+	schemas.sessionsTable.get(sid, function(err, s) {
+		if (err || !s) {
+			callback(err, null);
+		} else {
+			callback(null, s.attrs);
+		}
+	});
+};
+
 var getCreatorSessions = function(creatorid, callback) {
 	schemas.sessionsTable.scan().where('creator').equals(creatorid).exec(function(err, results) {
 		if (err || !results) {
@@ -124,7 +134,8 @@ var dbfuncs = {
 		create_session: createSession,
 		add_user: addUser,
 		add_result: addResult,
-		get_results: getSessionResults
+		get_results: getSessionResults,
+		get_session_by_id: getSessionByID
 };
 
 module.exports = dbfuncs;
