@@ -381,6 +381,18 @@ var postFetchSessionDetails = function(req, res) {
 	});
 };
 
+var passwordCheck = function(req, res) {
+	var input = req.body.passwordInput;
+	var password = req.body.password;
+	console.log(input);
+	console.log(password);
+	if (SHA3(input).toString() === password) {
+		res.send(true);
+	} else {
+		res.send(false);
+	}
+}
+
 
 var routes = {
 	//get_main: getMain,
@@ -403,7 +415,8 @@ var routes = {
 	post_data_sid: postDataSID,
 	post_fetch_results: postFetchResults,
 	post_leave_session: postLeaveSession,
-	post_fetch_session_details: postFetchSessionDetails
+	post_fetch_session_details: postFetchSessionDetails,
+	check_password: passwordCheck
 };
 
 module.exports = routes;

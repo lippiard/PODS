@@ -47,6 +47,7 @@ app.post('/joindatasession', routes.post_data_sid);
 app.post('/fetchresults', routes.post_fetch_results);
 app.post('/leavesession', routes.post_leave_session);
 app.post('/fetchsessiondetails', routes.post_fetch_session_details);
+app.post('/passcheck', routes.check_password);
 
 var queue = []; //list of sockets waiting to be matched
 

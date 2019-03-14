@@ -36,7 +36,7 @@
           <input type="password" class="form-control" name="passwordInput" id="passwordInput" placeholder="Password">       
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Submit</button>
+          <button type="button" class="btn btn-primary" id="joinbutton">Join</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
@@ -45,21 +45,18 @@
   
   
   <script>
-    jQuery(document).ready(function($) {
-    
+    jQuery(document).ready(function($) {  
       $(".clickable-row").click(function() {
         $.post('/fetchsessiondetails', {sid: $(this).data("sid")}, function(s) {
           if (s.privateSession) {
             $('#passwordInput').val('');
+            //$('#joinbutton').onclick = function() {joinSession(s.sessionid, s.password)}; 
+            $('#joinbutton').click(function() {joinSession(s.sessionid, s.password)}); 
             $('#passwordModal').modal();
           } else {
             joinSession(s.sessionid, null);
           }
         });
-        
-        //$.post('/joinsession', {sid: $(this).data("sid")}, function(data) {
-          //window.location.href = "/pod";
-        //});
       });
     
       $("#nav-placeholder").load("nav.ejs", function() {
@@ -69,10 +66,26 @@
       
     });
     
-    function joinSession(sid, passwordInput) {
-      $.post('/joinsession', {sid: sid}, function(data) {
-        window.location.href = "/pod";
-      });
+    function clicked() {
+      console.log('clicked');
+    }
+    
+    function joinSession(sid, password) {
+      if (password) {
+        $.post('/passcheck', {passwordInput: $('#passwordInput').val(), password: password}, function(check) {
+          if (check) {
+            $.post('/joinsession', {sid: sid}, function(data) {
+              window.location.href = "/pod";
+            });
+          } else {
+            
+          }
+        });
+      } else {
+        $.post('/joinsession', {sid: sid}, function(data) {
+          window.location.href = "/pod";
+        });
+      }
     }
   </script>
 

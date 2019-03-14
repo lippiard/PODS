@@ -50,16 +50,16 @@ var getUserFromEmail = function(email, callback) {
 	});
 };
 
-var addSession = function(gametype, privateSession, creator, callback) {
-	var newSession = {sessionid: uuid(), gametype: gametype, privateSession: true, creator: creator};
-	schemas.sessionsTable.create(newSession, function(err, s) {
-		if (err || !u) {
-			callback(err, null);
-		} else {
-			callback(null, s.attrs);
-		}
-	});
-};
+//var addSession = function(gametype, privateSession, creator, callback) {
+//	var newSession = {sessionid: uuid(), gametype: gametype, privateSession: true, creator: creator};
+//	schemas.sessionsTable.create(newSession, function(err, s) {
+//		if (err || !u) {
+//			callback(err, null);
+//		} else {
+//			callback(null, s.attrs);
+//		}
+//	});
+//};
 
 var getSessions = function(callback) {
 	schemas.sessionsTable.scan().exec(function(err, results) {
@@ -117,7 +117,8 @@ var getSessionResults = function(sessionid, callback) {
 };
 
 var createSession = function(gametype, sessionname, privateSession, creatorid, creatornick, password, callback) {
-	var newSession = {sessionid: uuid(), gametype: gametype, sessionname: sessionname, privateSession: privateSession, creator: creatorid, creatornick: creatornick, password: password};
+	var newSession = {sessionid: uuid(), gametype: gametype, sessionname: sessionname, privateSession: privateSession, 
+			creator: creatorid, creatornick: creatornick, password: SHA3(password).toString()};
 	schemas.sessionsTable.create(newSession, function(err, s) {
 		if (err || !s) {
 			callback(err, null);
