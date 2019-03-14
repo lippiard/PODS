@@ -33,7 +33,10 @@
         </div>
         <div class="modal-body">
           <label for="passwordInput">Password</label>
-          <input type="password" class="form-control" name="passwordInput" id="passwordInput" placeholder="Password">       
+          <input type="password" class="form-control" name="passwordInput" id="passwordInput" placeholder="Password">
+          <div id="message">
+            <font color="red">Incorrect password.</font>
+          </div>       
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" id="joinbutton">Join</button>
@@ -49,6 +52,7 @@
       $(".clickable-row").click(function() {
         $.post('/fetchsessiondetails', {sid: $(this).data("sid")}, function(s) {
           if (s.privateSession) {
+            $('#message').hide();
             $('#passwordInput').val('');
             //$('#joinbutton').onclick = function() {joinSession(s.sessionid, s.password)}; 
             $('#joinbutton').click(function() {joinSession(s.sessionid, s.password)}); 
@@ -78,7 +82,7 @@
               window.location.href = "/pod";
             });
           } else {
-            
+            $('#message').show();
           }
         });
       } else {
