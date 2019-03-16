@@ -115,10 +115,10 @@ io.on('connection', function(socket) {
 });
 
 //var port = 8080; //use for running on local machine
-var port = 80; // use for running through http online
+var port = 5000; // use for running through http online
 
 http.listen(port, function() {
-	console.log('listening on port 8080');
+	console.log('listening on port '+port);
 });
 
 //app.listen(8080);
