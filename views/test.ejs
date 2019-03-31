@@ -100,6 +100,10 @@
   }
   
   // this will be replaced with receiving a socket.io message from server w/ warning level
+  socket.on('update warning level', function(data) {
+  
+  });
+  
   function updateWarningLevel() {
     var r = Math.random();
     if (r < 0.5) {

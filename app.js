@@ -84,6 +84,29 @@ var pairSockets = function(socket, sid, username) {
 	}
 };
 
+
+//for now just pairs
+var groupSockets = function(socket, sid, username) {
+	var waiting = queue.find(function(el) {
+		if (el.sessionID === sid) {
+			return el;
+		}
+	});
+	if (waiting) {
+		//remove waiting from queue
+		queue = queue.filter(item => !((item.socket.id === waiting.socket.id) && (sid === item.sessionID)));
+		
+		var waitingSocket = waiting.socket;
+		var room = sid+'#'+waitingSocket.id+'#'+socket.id; //name rooms as sessionID#socket1#socket2
+		waitingSocket.join(room);
+		socket.join(room);
+		waitingSocket.emit('start game', {room: room});
+		socket.emit('start game', {room: room});
+	} else {
+		queue.push({socket: socket, sessionID: sid});
+	}
+};
+
 io.on('connection', function(socket) {
 	console.log('user '+socket.id+' connected');
 	
