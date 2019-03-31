@@ -27,6 +27,7 @@ app.use(session({
 
 //app.get('/', routes.get_main);
 app.get('/', routes.get_home);
+app.get('/test', routes.get_test);
 //app.post('/processchoice', routes.process_choice);
 app.get('/results', routes.get_results);
 app.get('/login', routes.get_login);

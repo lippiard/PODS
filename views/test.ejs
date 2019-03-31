@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  
+  <style>
+  </style>
+  
+  
+</head>
+<body>
+  <div id="nav-placeholder">
+  </div>
+  <!-- <h1>This is the POD page. The ID of this game session is <%= sid %></h1> -->
+
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-2"></div>
+    <div class="col col-md-auto">
+
+      <div id="content">
+	    <%- include(page, {game: game, player: player, choices: choices}); %>
+      </div>
+  
+      <div id="resultsscreen">
+        <%- include("results", {}); %>
+      </div>
+  
+    </div>
+    <div class="col col-lg-2"></div>
+  </div>
+
+  <script src="HideAndSeek_package.js"></script> 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>

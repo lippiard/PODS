@@ -25,6 +25,10 @@ var getLogin = function(req, res) {
 	}
 };
 
+var getTest = function(req, res) {
+	res.render('test.ejs');
+}
+
 var getSignup = function(req, res) {
 	var err = req.query.err;
 	var messages = {1: 'All fields are required.', 2: 'Passwords did not match.', 
@@ -397,6 +401,7 @@ var passwordCheck = function(req, res) {
 var routes = {
 	//get_main: getMain,
 	//process_choice: processChoice,
+	get_test: getTest,
 	get_results: getResults,
 	get_login: getLogin,
 	post_check_login: postCheckLogin,
