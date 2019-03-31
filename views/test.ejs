@@ -11,18 +11,20 @@
   
 </head>
 <body>
-  <div id="gamewindow" class="container>
+  <div id="playwindow" class="container>
     <div class="row">
       <div class="col-lg-10">
         <div id="countdown">
-          <h1 id="days"></h1>
-          <h1 id="hours"></h1>
+          <h1 id="timeleft"></h1>
           <div class="progress">
-            <div id="timerbar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="240" style="width: 75%"></div>
+            <div id="timerbar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="240" style="width: 0%"></div>
           </div>
+          <h1 id="warninglevel"></h1>
+          <button id="evacbutton" onclick="endGame()">Evacuate</button>
         </div>
         <div id="finished">
           <h1>Game over</h1>
+          <h1 id="choice"></h1>
         </div>
       </div>
     </div>
@@ -34,35 +36,39 @@
   var hours;
   var progress;
   var maxProgress;
+  var warningLevel;
+  var evacAt;
+  var timer;
   
   jQuery(document).ready(function($) {
-    days = 10;
+    warningLevel = 1;
+    days = 1;
     hours = 0;
     progress = 0;
     maxProgress = days * 24;
     $("#timerbar").attr("aria-valuemax", maxProgress);
-    $("#days").html("Days: "+days);
-    $("#hours").html("Hours: "+hours);
+    $("#timeleft").html("Days: "+days+", Hours: "+hours);
     $("#finished").hide();
     updateProgBar();
+    $("#warninglevel").html("Warning Level: "+warningLevel);
     
-    //updates every second
-    var timer = setInterval(function() {
+    //updates every second (one hour of in-game time)
+    timer = setInterval(function() {
       progress = progress + 1;
       hours = hours - 1;
       if (hours < 0) {
         hours = 23;
         days = days - 1;
       }
-      $("#days").html("Days: "+days);
-      $("#hours").html("Hours: "+hours);
+      $("#timeleft").html("Days: "+days+", Hours: "+hours);
       updateProgBar();
     
       if (days < 0) {
-        clearInterval(timer);
-        $("#countdown").hide();
-        $("#finished").show();
+        endGame();
       }
+      
+      updateWarningLevel();
+      
     }, 1000);
     
   });
@@ -71,6 +77,34 @@
     var val = progress / maxProgress * 100;
     val = Math.min(val, 100);
     $("#timerbar").css('width', val+"%").attr("aria-valuenow",val);
+  }
+  
+  function updateWarningLevel() {
+    var r = Math.random();
+    if (r < 0.5) {
+      warningLevel = warningLevel - 1;
+    } else {
+      warningLevel = warningLevel + 1;
+    }
+    if (warningLevel < 0) {
+      warningLevel = 0;
+    } else if (warningLevel > 5) {
+      warningLevel = 5;
+    }
+    
+    $("#warninglevel").html("Warning Level: "+warningLevel);
+  }
+  
+  function endGame() {
+    clearInterval(timer);
+    $("#countdown").hide();
+    $("#finished").show();
+    
+    if (days < 0) {
+      $("#choice").html("You chose not to evacuate.");
+    } else {
+      $("#choice").html("You evacuated with "+days+" days and "+hours+" hours remaining.");
+    }
   }
   
 </script> 
