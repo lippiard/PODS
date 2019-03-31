@@ -11,27 +11,69 @@
   
 </head>
 <body>
-  <div id="nav-placeholder">
-  </div>
-  <!-- <h1>This is the POD page. The ID of this game session is <%= sid %></h1> -->
-
-  <div class="row justify-content-md-center">
-    <div class="col col-lg-2"></div>
-    <div class="col col-md-auto">
-
-      <div id="content">
-	    <%- include(page, {game: game, player: player, choices: choices}); %>
+  <div id="gamewindow" class="container>
+    <div class="row">
+      <div class="col-lg-10">
+        <div id="countdown">
+          <h1 id="days"></h1>
+          <h1 id="hours"></h1>
+          <div class="progress">
+            <div id="timerbar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="240" style="width: 75%"></div>
+          </div>
+        </div>
+        <div id="finished">
+          <h1>Game over</h1>
+        </div>
       </div>
-  
-      <div id="resultsscreen">
-        <%- include("results", {}); %>
-      </div>
-  
     </div>
-    <div class="col col-lg-2"></div>
   </div>
-
-  <script src="HideAndSeek_package.js"></script> 
+  
+<script>
+  
+  var days;
+  var hours;
+  var progress;
+  var maxProgress;
+  
+  jQuery(document).ready(function($) {
+    days = 10;
+    hours = 0;
+    progress = 0;
+    maxProgress = days * 24;
+    $("#timerbar").attr("aria-valuemax", maxProgress);
+    $("#days").html("Days: "+days);
+    $("#hours").html("Hours: "+hours);
+    $("#finished").hide();
+    updateProgBar();
+    
+    //updates every second
+    var timer = setInterval(function() {
+      progress = progress + 1;
+      hours = hours - 1;
+      if (hours < 0) {
+        hours = 23;
+        days = days - 1;
+      }
+      $("#days").html("Days: "+days);
+      $("#hours").html("Hours: "+hours);
+      updateProgBar();
+    
+      if (days < 0) {
+        clearInterval(timer);
+        $("#countdown").hide();
+        $("#finished").show();
+      }
+    }, 1000);
+    
+  });
+  
+  function updateProgBar() {
+    var val = progress / maxProgress * 100;
+    val = Math.min(val, 100);
+    $("#timerbar").css('width', val+"%").attr("aria-valuenow",val);
+  }
+  
+</script> 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
