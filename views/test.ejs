@@ -11,21 +11,26 @@
   
 </head>
 <body>
-  <div id="playwindow" class="container>
+  <div class="container>
     <div class="row">
-      <div class="col-lg-10">
-        <div id="countdown">
-          <h1 id="timeleft"></h1>
-          <div class="progress">
-            <div id="timerbar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="240" style="width: 0%"></div>
+      <div id="playwindow">
+        <div class="col-lg-10">
+          <div id="playwindow">
+            <h1 id="timeleft"></h1>
+            <div class="progress">
+              <div id="timerbar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="240" style="width: 0%"></div>
+            </div>
+            <h1 id="warninglevel"></h1>
+            <button id="evacbutton" onclick="evacuate()">Evacuate</button>
           </div>
-          <h1 id="warninglevel"></h1>
-          <button id="evacbutton" onclick="endGame()">Evacuate</button>
         </div>
-        <div id="finished">
-          <h1>Game over</h1>
-          <h1 id="choice"></h1>
-        </div>
+      </div>
+      <div id="waitingwindow">
+        <h1>Waiting for all other players to evacuate or for time to be up.</h1>
+      </div>
+      <div id="resultswindow">
+        <h1>Game over</h1>
+        <h1 id="choice"></h1>
       </div>
     </div>
   </div>
@@ -48,7 +53,8 @@
     maxProgress = days * 24;
     $("#timerbar").attr("aria-valuemax", maxProgress);
     $("#timeleft").html("Days: "+days+", Hours: "+hours);
-    $("#finished").hide();
+    $("#resultswindow").hide();
+    $("#waitingwindow").hide();
     updateProgBar();
     $("#warninglevel").html("Warning Level: "+warningLevel);
     
@@ -79,6 +85,8 @@
     $("#timerbar").css('width', val+"%").attr("aria-valuenow",val);
   }
   
+  
+  // this will be replaced with receiving a socket.io message from server w/ warning level
   function updateWarningLevel() {
     var r = Math.random();
     if (r < 0.5) {
@@ -95,15 +103,22 @@
     $("#warninglevel").html("Warning Level: "+warningLevel);
   }
   
+  function evacuate() {
+    evacAt = {days: days, hours: hours};
+    $("#playwindow").hide();
+    $("#waitingwindow").show();
+  }
+  
   function endGame() {
     clearInterval(timer);
-    $("#countdown").hide();
-    $("#finished").show();
+    $("#playwindow").hide();
+    $("#waitingwindow").hide();
+    $("#resultswindow").show();
     
-    if (days < 0) {
+    if (!evacAt) {
       $("#choice").html("You chose not to evacuate.");
     } else {
-      $("#choice").html("You evacuated with "+days+" days and "+hours+" hours remaining.");
+      $("#choice").html("You evacuated with "+evacAt.days+" days and "+evacAt.hours+" hours remaining.");
     }
   }
   
