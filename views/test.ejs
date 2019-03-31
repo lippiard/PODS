@@ -32,6 +32,9 @@
         <h1>Game over</h1>
         <h1 id="choice"></h1>
       </div>
+      <div id="matchingwindow">
+        <h1>Matching you with other players...</h1>
+      </div>
     </div>
   </div>
   
@@ -44,6 +47,9 @@
   var warningLevel;
   var evacAt;
   var timer;
+  var socket = io();
+  var gametype = "Evacuation";
+  var sid = "<%= sid %>";
   
   jQuery(document).ready(function($) {
     warningLevel = 1;
@@ -55,9 +61,18 @@
     $("#timeleft").html("Days: "+days+", Hours: "+hours);
     $("#resultswindow").hide();
     $("#waitingwindow").hide();
+    $("#playwindow").hide();
     updateProgBar();
-    $("#warninglevel").html("Warning Level: "+warningLevel);
+    $("#warninglevel").html("Warning Level: "+warningLevel); 
     
+    socket.emit('find game room', {sid:sid});
+    
+  });
+  
+  socket.on('start game', function(data) {
+    $("#matchingwindow").hide();
+    $("#playwindow").show();
+  
     //updates every second (one hour of in-game time)
     timer = setInterval(function() {
       progress = progress + 1;
@@ -76,7 +91,6 @@
       updateWarningLevel();
       
     }, 1000);
-    
   });
   
   function updateProgBar() {
@@ -84,7 +98,6 @@
     val = Math.min(val, 100);
     $("#timerbar").css('width', val+"%").attr("aria-valuenow",val);
   }
-  
   
   // this will be replaced with receiving a socket.io message from server w/ warning level
   function updateWarningLevel() {

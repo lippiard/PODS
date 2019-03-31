@@ -102,7 +102,7 @@ module.exports = schemas;
 //		
 //		var sessionid = uuid();
 //		
-//		var session = {sessionid: sessionid, gametype:'Hide and Seek', sessionname: 'test hns', privateSession: true, creator: id, creatornick: 'Test user', password: SHA3('game pass').toString()};
+//		var session = {sessionid: sessionid, gametype:'HideAndSeek', sessionname: 'test hns', privateSession: true, creator: id, creatornick: 'Test user', password: SHA3('game pass').toString()};
 //		Session.create(session, function(err, s) {
 //			if (err) {
 //				console.log(err);
