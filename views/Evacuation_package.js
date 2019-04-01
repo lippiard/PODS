@@ -13,6 +13,10 @@
   var storm = false;
   
   jQuery(document).ready(function($) {
+	$("#nav-placeholder").load("nav.ejs", function() {
+	  $(".nav").find(".active").removeClass("active");
+	});
+	
     warningLevel = 1;
     days = 1;
     hours = 0;

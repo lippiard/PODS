@@ -26,7 +26,8 @@ var getLogin = function(req, res) {
 };
 
 var getTest = function(req, res) {
-	res.render('test.ejs', {sid: "some random sid"});
+	//res.render('test.ejs', {sid: "some random sid"});
+	res.redirect('/');
 }
 
 var getSignup = function(req, res) {
