@@ -72,16 +72,6 @@ var getSessions = function(callback) {
 	});
 };
 
-var getSessionByID = function(sid, callback) {
-	schemas.sessionsTable.get(sid, function(err, s) {
-		if (err || !s) {
-			callback(err, null);
-		} else {
-			callback(null, s.attrs);
-		}
-	});
-};
-
 var getCreatorSessions = function(creatorid, callback) {
 	schemas.sessionsTable.scan().where('creator').equals(creatorid).exec(function(err, results) {
 		if (err || !results) {
@@ -112,6 +102,16 @@ var getSessionResults = function(sessionid, callback) {
 		} else {
 			let rs = r.Items.map(ri => ri.attrs);
 			callback(null, rs);
+		}
+	});
+};
+
+var getSessionByID = function(sessionid, callback) {
+	schemas.sessionsTable.get(sessionid, function(err, s) {
+		if (err || !s) {
+			callback(err, null);
+		} else {
+			callback(null, s.attrs);
 		}
 	});
 };

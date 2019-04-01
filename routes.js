@@ -165,7 +165,15 @@ var getPod = function(req, res) {
 //		req.session.round = 1;
 //		res.redirect('/pod');
 //	}
-	res.render('pod.ejs', {sid: req.session.currentSID, game: null, player: null, page: 'main', choices: choices});
+	db.get_session_by_id(req.session.currentSID, function(err, s) {
+		if (s) {
+			var type = s.gametype;
+			if (type === "Hide and Seek") {
+				type = "HideAndSeek";
+			}
+			res.render('pod.ejs', {sid: req.session.currentSID, game: type, choices: choices});
+		}
+	});
 };
 
 //var getSessions = function(req, res) {
@@ -254,6 +262,7 @@ var postChoices = function(req, res) {
 	db.add_result(req.body.sid, req.body.gametype, ca, ra, function(err, r) {
 		if (err || !r) {
 			console.log('error adding result');
+			console.log(err);
 		}
 	});
 };

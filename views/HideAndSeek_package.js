@@ -1,10 +1,10 @@
 	var socketChoices;
-    var sid = "<%= sid %>";
+    //var sid = "<%= sid %>";
     var round;
     var socket = io();
     var gameroom;
     var role;
-    var gametype = 'Hide and Seek';
+    var gametype = 'HideAndSeek';
   
     jQuery(document).ready(function($) {
       $("#nav-placeholder").load("nav.ejs", function() {
@@ -19,7 +19,7 @@
       
       round = 1;
       
-      socket.emit('find game room', {sid:sid}); //find game room (pair with one other user in session)
+      socket.emit('find game room', {sid:sid, gametype: gametype}); //find game room (pair with one other user in session)
       
       // tell server when user leaves/refreshes page
       $(window).bind('beforeunload', function() {

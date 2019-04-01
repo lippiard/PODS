@@ -53,7 +53,7 @@ app.post('/passcheck', routes.check_password);
 var queue = []; //list of sockets waiting to be matched
 
 //add socket to queue or pair with socket already in queue
-var pairSockets = function(socket, sid, username) {
+var pairSockets = function(socket, sid) {
 	var waiting = queue.find(function(el) {
 		if (el.sessionID === sid) {
 			return el;
@@ -86,7 +86,7 @@ var pairSockets = function(socket, sid, username) {
 
 
 //for now just pairs
-var groupSockets = function(socket, sid, username) {
+var groupSockets = function(socket, sid) {
 	var waiting = queue.find(function(el) {
 		if (el.sessionID === sid) {
 			return el;
@@ -100,11 +100,34 @@ var groupSockets = function(socket, sid, username) {
 		var room = sid+'#'+waitingSocket.id+'#'+socket.id; //name rooms as sessionID#socket1#socket2
 		waitingSocket.join(room);
 		socket.join(room);
-		waitingSocket.emit('start game', {room: room});
-		socket.emit('start game', {room: room});
+		var rnd = Math.random();
+		var role1;
+		var role2;
+		if (rnd < 0.5) {
+			role1 = 'Timer';
+		} else {
+			role2 = 'Timer';
+		}
+		waitingSocket.emit('start game', {room: room, role: role1});
+		socket.emit('start game', {room: room, role: role2});
 	} else {
 		queue.push({socket: socket, sessionID: sid});
 	}
+};
+
+function evacWarningLevel(currentLevel) {
+	var r = Math.random();
+    if (r < 0.5) {
+      currentLevel = currentLevel - 1;
+    } else {
+      currentLevel = currentLevel + 1;
+    }
+    if (currentLevel < 0) {
+      currentLevel = 0;
+    } else if (currentLevel > 5) {
+      currentLevel = 5;
+    }
+    return currentLevel;
 };
 
 io.on('connection', function(socket) {
@@ -115,7 +138,11 @@ io.on('connection', function(socket) {
 	});
 	
 	socket.on('find game room', function(data) {
-		pairSockets(socket, data.sid, data.username);
+		if (data.gametype === "HideAndSeek") {
+			pairSockets(socket, data.sid);
+		} else if (data.gametype === "Evacuation") {
+			groupSockets(socket, data.sid);
+		}
 	});
 	
 	socket.on('made choice', function(data) {
@@ -135,6 +162,11 @@ io.on('connection', function(socket) {
 	socket.on('disconnect', function() {
 		console.log('user disconnected');
 	});
+	
+	socket.on('evac tick', function(data) {
+		io.in(data.room).emit('update warning level', {warningLevel: evacWarningLevel(data.warningLevel)});
+	});
+	
 	
 });
 

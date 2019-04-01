@@ -1,46 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head> 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  
-  <style>
-  </style>
-  
-  
-</head>
-<body>
-  <div class="container>
-    <div class="row">
-      <div id="playwindow">
-        <div class="col-lg-10">
-          <div id="playwindow">
-            <h1 id="timeleft"></h1>
-            <div class="progress">
-              <div id="timerbar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="240" style="width: 0%"></div>
-            </div>
-            <h1 id="warninglevel"></h1>
-            <button id="evacbutton" onclick="evacuate()">Evacuate</button>
-          </div>
-        </div>
-      </div>
-      <div id="waitingwindow">
-        <h1>Waiting for all other players to evacuate or for time to be up.</h1>
-      </div>
-      <div id="resultswindow">
-        <h1 id="stormstatus"></h1>
-        <h1 id="choice"></h1>
-        <div id="allresults"></div>
-      </div>
-      <div id="matchingwindow">
-        <h1>Matching you with other players...</h1>
-      </div>
-    </div>
-  </div>
-  
-<script>
-  
   var days;
   var hours;
   var progress;
@@ -50,7 +7,7 @@
   var timer;
   var socket = io();
   var gametype = "Evacuation";
-  var sid = "<%= sid %>";
+  //var sid = "<%= sid %>";
   var gameroom;
   var role;
   var storm = false;
@@ -71,6 +28,12 @@
     
     socket.emit('find game room', {sid:sid, gametype: gametype});
     
+    // tell server when user leaves/refreshes page
+    $(window).bind('beforeunload', function() {
+      $.post('/leavesession',function(data) { 
+        socket.emit('leave queue', {sid: sid});     
+      });
+    });
   });
   
   socket.on('start game', function(data) {
@@ -142,12 +105,3 @@
       $("#choice").html("You evacuated with "+evacAt.days+" days and "+evacAt.hours+" hours remaining.");
     }
   }
-
-  
-</script> 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-</body>
-</html>
