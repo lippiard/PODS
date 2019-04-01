@@ -86,31 +86,44 @@ var pairSockets = function(socket, sid) {
 
 
 //for now just pairs
+var numPerEvac = 4;
+
 var groupSockets = function(socket, sid) {
-	var waiting = queue.find(function(el) {
-		if (el.sessionID === sid) {
-			return el;
+	var waiting = [];
+	for (var i = 0; i < numPerEvac - 1; i++) {
+		var waitingOne = queue.find(function(el) {
+			if (el.sessionID === sid) {
+				return el;
+			}
+		});
+		if (waitingOne) {
+			waiting.push(waitingOne);
 		}
-	});
-	if (waiting) {
+		queue = queue.filter(item => !((item.socket.id === waitingOne.socket.id) && (sid === item.sessionID)));
+	}
+	if (waiting.length == numPerEvac - 1) {
+		var room = sid+'#'+socket.id;
 		//remove waiting from queue
-		queue = queue.filter(item => !((item.socket.id === waiting.socket.id) && (sid === item.sessionID)));
-		
-		var waitingSocket = waiting.socket;
-		var room = sid+'#'+waitingSocket.id+'#'+socket.id; //name rooms as sessionID#socket1#socket2
-		waitingSocket.join(room);
-		socket.join(room);
-		var rnd = Math.random();
-		var role1;
-		var role2;
-		if (rnd < 0.5) {
-			role1 = 'Timer';
-		} else {
-			role2 = 'Timer';
+		for (var i = 0; i < waiting.length; i++) {
+		  queue = queue.filter(item => !((item.socket.id === waiting[i].socket.id) && (sid === item.sessionID)));
+		  sid += '#'+waiting[i].socket.id;
 		}
-		waitingSocket.emit('start game', {room: room, role: role1});
-		socket.emit('start game', {room: room, role: role2});
+		
+		var role1 = "Timer";
+		var role2;
+		
+		socket.join(room);
+		socket.emit('start game', {room: room, role: role1});
+		
+		for (var i = 0; i < waiting.length; i++) {
+			waiting[i].socket.join(room);
+			waiting[i].socket.emit('start game', {room: room, role: role2});
+		}
+	
 	} else {
+		for (var i = 0; i < waiting.length; i++) {
+			queue.push({socket: waiting[i].socket, sessionID: sid});
+		}
 		queue.push({socket: socket, sessionID: sid});
 	}
 };
@@ -170,8 +183,8 @@ io.on('connection', function(socket) {
 	
 });
 
-var port = 8080; //use for running on local machine
-//var port = 5000; // use for running through http online
+//var port = 8080; //use for running on local machine
+var port = 5000; // use for running through http online
 
 http.listen(port, function() {
 	console.log('listening on port '+port);
