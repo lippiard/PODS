@@ -86,7 +86,7 @@ var pairSockets = function(socket, sid) {
 
 
 //for now just pairs
-var numPerEvac = 4;
+var numPerEvac = 2;
 
 var groupSockets = function(socket, sid) {
 	var waiting = [];
@@ -183,8 +183,8 @@ io.on('connection', function(socket) {
 	
 });
 
-//var port = 8080; //use for running on local machine
-var port = 5000; // use for running through http online
+var port = 8080; //use for running on local machine
+//var port = 5000; // use for running through http online
 
 http.listen(port, function() {
 	console.log('listening on port '+port);
