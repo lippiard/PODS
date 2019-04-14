@@ -60,8 +60,8 @@
     }); 
     
     var formSubmit = function() {
-      var choice = $("input[name='choice']:checked").val();
-      $("input[name='choice']:checked").prop('checked', false); //unselect selected radio button (to reset for next round)
+      var choice = $(document.activeElement).val();
+      console.log(choice);
       //$.post('/postchoice', {choice: choice, round: round});
       $('#playscreen').hide();
       $('#waitingscreen').show();
