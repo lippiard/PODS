@@ -1,28 +1,33 @@
 
-  <div class="container>
+  <div class="container">
     <div class="row">
-      <div id="playwindow">
-        <div class="col-lg-10">
-          <div id="playwindow">
-            <h1 id="timeleft"></h1>
-            <div class="progress">
-              <div id="timerbar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="240" style="width: 0%"></div>
+      <div class="col">
+        <div id="playwindow">
+          <div class="row">
+            <div class="col-2">
+              <h1>Num evac so far</h1>
             </div>
-            <h1 id="warninglevel"></h1>
-            <button id="evacbutton" onclick="evacuate()">Evacuate</button>
+            <div class="col-10">
+              <h1 id="timeleft"></h1>
+              <div class="progress">
+                <div id="timerbar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="240" style="width: 0%"></div>
+              </div>
+              <h1 id="warninglevel"></h1>
+              <button id="evacbutton" onclick="evacuate()">Evacuate</button>
+            </div>
           </div>
         </div>
-      </div>
-      <div id="waitingwindow">
-        <h1>Waiting for all other players to evacuate or for time to be up.</h1>
-      </div>
-      <div id="resultswindow">
-        <h1 id="stormstatus"></h1>
-        <h1 id="choice"></h1>
-        <div id="allresults"></div>
-      </div>
-      <div id="matchingwindow">
-        <h1>Matching you with other players...</h1>
+        <div id="waitingwindow">
+          <h1>Waiting for all other players to evacuate or for time to be up.</h1>
+        </div>
+        <div id="resultswindow">
+          <h1 id="stormstatus"></h1>
+          <h1 id="choice"></h1>
+          <div id="allresults"></div>
+        </div>
+        <div id="matchingwindow">
+          <h1>Matching you with other players...</h1>
+        </div>
       </div>
     </div>
   </div>
