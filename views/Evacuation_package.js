@@ -11,6 +11,8 @@
   var gameroom;
   var role;
   var storm = false;
+  var evaced = 0;
+  var numplayers;
   
   jQuery(document).ready(function($) {
 	$("#nav-placeholder").load("nav.ejs", function() {
@@ -43,8 +45,11 @@
   socket.on('start game', function(data) {
     role = data.role;
     gameroom = data.room;
+    numplayers = data.numplayers;
     $("#matchingwindow").hide();
     $("#playwindow").show();
+    $("#numevac").html(evaced);
+    $("#numplayers").html(numplayers);
   
     //updates every second (one hour of in-game time)
     timer = setInterval(function() {
@@ -69,6 +74,11 @@
     }, 1000);
   });
   
+  socket.on('increment evaced', function(data) {
+	  evaced++;
+	  $("#numevac").html(evaced);
+  });
+  
   function updateProgBar() {
     var val = progress / maxProgress * 100;
     val = Math.min(val, 100);
@@ -88,6 +98,7 @@
     evacAt = {days: days, hours: hours, warningLevel: warningLevel};
     $("#playwindow").hide();
     $("#waitingwindow").show();
+    socket.emit('evaced', {room: gameroom});
   }
   
   function endGame() {

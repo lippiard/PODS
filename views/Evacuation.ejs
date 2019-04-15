@@ -4,15 +4,13 @@
       <div class="col">
         <div id="playwindow">
           <div class="row">
-            <div class="col-2">
-              <h1>Num evac so far</h1>
-            </div>
             <div class="col-10">
               <h1 id="timeleft"></h1>
               <div class="progress">
                 <div id="timerbar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="240" style="width: 0%"></div>
               </div>
               <h1 id="warninglevel"></h1>
+              <h1><span id="numevac"></span> of <span id="numplayers"></span> have evacuated.</span></h1>
               <button id="evacbutton" onclick="evacuate()">Evacuate</button>
             </div>
           </div>

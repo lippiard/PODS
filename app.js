@@ -113,11 +113,11 @@ var groupSockets = function(socket, sid) {
 		var role2;
 		
 		socket.join(room);
-		socket.emit('start game', {room: room, role: role1});
+		socket.emit('start game', {room: room, role: role1, numplayers: numPerEvac});
 		
 		for (var i = 0; i < waiting.length; i++) {
 			waiting[i].socket.join(room);
-			waiting[i].socket.emit('start game', {room: room, role: role2});
+			waiting[i].socket.emit('start game', {room: room, role: role2, numplayers: numPerEvac});
 		}
 	
 	} else {
@@ -180,6 +180,9 @@ io.on('connection', function(socket) {
 		io.in(data.room).emit('update warning level', {warningLevel: evacWarningLevel(data.warningLevel)});
 	});
 	
+	socket.on('evaced', function(data) {
+		socket.to(data.room).emit('increment evaced', data);
+	});
 	
 });
 
