@@ -61,7 +61,6 @@
     
     var formSubmit = function() {
       var choice = $(document.activeElement).val();
-      console.log(choice);
       //$.post('/postchoice', {choice: choice, round: round});
       $('#playscreen').hide();
       $('#waitingscreen').show();
