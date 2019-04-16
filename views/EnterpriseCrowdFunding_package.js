@@ -20,5 +20,7 @@ jQuery(document).ready(function($) {
 socket.on('start game', function(data) {
 	
 	
-	$.getJSON("")
+	$.getJSON("ecf_payoffs.json", function(payoffs) {
+		
+	});
 });

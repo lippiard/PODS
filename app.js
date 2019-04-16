@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/img/')); // for getting images from local files
 app.use(express.static(__dirname + '/views/')); // for loading ejs parts into other ejs
 app.use(express.static(__dirname + '/node_modules/ejs/')); //for importing ejs into html dynamically
+app.use(express.static(__dirname + '/gamedata/'));
 app.use(session({
 	secret: 'secret',
 	resave: false,
