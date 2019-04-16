@@ -131,9 +131,9 @@ var groupSockets = function(socket, sid) {
 
 function evacWarningLevel(currentLevel) {
 	var r = Math.random();
-    if (r < 0.5) {
+    if (r < 0.15) {
       currentLevel = currentLevel - 1;
-    } else {
+    } else if (r < .3 ){
       currentLevel = currentLevel + 1;
     }
     if (currentLevel < 0) {

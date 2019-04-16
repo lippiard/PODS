@@ -2,7 +2,6 @@
   var hours;
   var progress;
   var maxProgress;
-  var warningLevel;
   var evacAt;
   var timer;
   var socket = io();
@@ -60,7 +59,9 @@
       if (hours < 0) {
         hours = 23;
         days = days - 1;
-        score += 1;
+        if (!evacAt) {
+            score += 1;	
+        }
       }
       $("#timeleft").html("Days: "+days+", Hours: "+hours);
       updateProgBar();
