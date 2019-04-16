@@ -13,6 +13,7 @@
   var storm = false;
   var evaced = 0;
   var numplayers;
+  var evacTimes = [];
   
   jQuery(document).ready(function($) {
 	$("#nav-placeholder").load("nav.ejs", function() {
@@ -76,6 +77,7 @@
   
   socket.on('increment evaced', function(data) {
 	  evaced++;
+	  evacTimes.push(data.evacAt)
 	  $("#numevac").html(evaced);
   });
   
@@ -98,7 +100,8 @@
     evacAt = {days: days, hours: hours, warningLevel: warningLevel};
     $("#playwindow").hide();
     $("#waitingwindow").show();
-    socket.emit('evaced', {room: gameroom});
+    evacTimes.push(evacAt);
+    socket.emit('evaced', {room: gameroom, evacAt: evacAt});
   }
   
   function endGame() {
@@ -119,4 +122,7 @@
     } else {
       $("#choice").html("You evacuated with "+evacAt.days+" days and "+evacAt.hours+" hours remaining.");
     }
+    
+    //debug
+    console.log(evacTimes);
   }
