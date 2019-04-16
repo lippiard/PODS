@@ -5,6 +5,7 @@ var socket = io();
 var funds = 0;
 var maxfunds = 80;
 var chosenAllos = {};
+var nplayers;
 
 jQuery(document).ready(function($) {
 	$("#nav-placeholder").load("nav.ejs", function() {
@@ -48,6 +49,8 @@ jQuery(document).ready(function($) {
 });
 
 socket.on('start game', function(data) {
+	gameroom = data.room;
+	nplayers = data.numplayers;
 	role = data.role;
 	fillPayoffTable();
 	$("#matchingwindow").hide();
@@ -59,17 +62,28 @@ function submitAllocation() {
 	for (var i = 1; i <= 10; i++) {
 		choices.allos.push($("#a"+i).val());
 	}
-	$("#playwindow").hide();
-	$("#resultswindow").show();
 	socket.emit('chose allo', {room: gameroom, choices: choices});
 	chosenAllos[role] = choices.allos;
-	$("#allotest").html(chosenAllos);
+	$("#playwindow").hide();
+	$("#waitingwindow").show();
+	if (Object.keys(chosenAllos).length >= nplayers) {
+		endGame();
+	}
 }
 
 socket.on('allo chosen', function(data) {
 	chosenAllos[data.choices.role] = data.choices.allos;
-	
+	if (Object.keys(chosenAllos).length >= nplayers) {
+		endGame();
+	}
 });
+
+function endGame() {
+	$("#allotest").html(chosenAllos);
+	$("#playwindow").hide();
+	$("#waitingwindow").hide();
+	$("#resultswindow").show();
+}
 
 function updateFunds() {
 	funds = maxfunds;
