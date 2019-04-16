@@ -17,6 +17,11 @@ jQuery(document).ready(function($) {
       });
     });
     
+    $("#matchingwindow").show();
+    $("#playwindow").hide();
+    $("#resultswindow").hide();
+    $("#waitingwindow").hide();
+    
     funds = maxfunds;
     updateFunds();
     
@@ -35,6 +40,8 @@ jQuery(document).ready(function($) {
     //for testing below
     role = 'player1';
     fillPayoffTable();
+    $("#matchingwindow").hide();
+    $("#playwindow").show();
 });
 
 socket.on('start game', function(data) {
@@ -46,10 +53,23 @@ socket.on('start game', function(data) {
 	});
 });
 
+function submitAllocation() {
+	var allos = [];
+	for (var i = 1; i <= 10; i++) {
+		allos.push($("#a"+i).val());
+	}
+	$("#allotest").html(allos);
+	$("#playwindow").hide();
+	$("#resultswindow").show();
+}
+
 function updateFunds() {
 	funds = maxfunds;
 	for (var i = 1; i <= 10; i++) {
 		funds = funds - $("#a"+i).val();	
+	}
+	for (var i = 1; i <= 10; i++) {
+		$("#a"+i).attr('max', funds + Number($("#a"+i).val()));
 	}
 	$("#funds").html(funds);
 }
