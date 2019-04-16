@@ -14,7 +14,7 @@
   var evaced = 0;
   var numplayers;
   var evacTimes = [];
-  var score;
+  var score = 0;
   
   jQuery(document).ready(function($) {
 	$("#nav-placeholder").load("nav.ejs", function() {
@@ -108,6 +108,10 @@
   
   function endGame() {
     
+	if (!evacAt && warningLevel == 5) {
+		score = 0;
+	}   
+	console.log(score);
     clearInterval(timer);
     $("#playwindow").hide();
     $("#waitingwindow").hide();
