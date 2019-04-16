@@ -1,3 +1,8 @@
+var gametype = 'EnterpriseCrowdFunding';
+var gameroom;
+var role;
+var socket = io();
+
 jQuery(document).ready(function($) {
 	$("#nav-placeholder").load("nav.ejs", function() {
 	  $(".nav").find(".active").removeClass("active");
@@ -9,4 +14,11 @@ jQuery(document).ready(function($) {
         socket.emit('leave queue', {sid: sid});     
       });
     });
+    
+});
+
+socket.on('start game', function(data) {
+	
+	
+	$.getJSON("")
 });
