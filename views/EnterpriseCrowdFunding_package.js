@@ -15,12 +15,26 @@ jQuery(document).ready(function($) {
       });
     });
     
+    //for testing below
+    role = 'player1';
+    $.getJSON("ecf_payoffs.json", function(payoffs) {
+    	console.log(payoffs);
+		fillPayoffTable(payoffs);
+	});
 });
 
 socket.on('start game', function(data) {
 	
+	role = 'player1';
 	
 	$.getJSON("ecf_payoffs.json", function(payoffs) {
-		
+		fillPayoffTable(payoffs);
 	});
 });
+
+function fillPayoffTable(payoffs) {
+	for (var i = 1; i <= 10; i++) {
+		$("#p"+i).html(payoffs[role][i-1]);
+		$("#m"+1).html(payoffs.median[i-1]);
+	}
+}
