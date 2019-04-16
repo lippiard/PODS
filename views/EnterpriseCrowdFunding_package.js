@@ -60,7 +60,7 @@ socket.on('start game', function(data) {
 function submitAllocation() {
 	var choices = {role: role, allos: []};
 	for (var i = 1; i <= 10; i++) {
-		choices.allos.push($("#a"+i).val());
+		choices.allos.push(Number($("#a"+i).val()));
 	}
 	socket.emit('chose allo', {room: gameroom, choices: choices});
 	chosenAllos[role] = choices.allos;
@@ -78,11 +78,38 @@ socket.on('allo chosen', function(data) {
 	}
 });
 
+function getProjectFunding() {
+	var funding = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+	for (var i = 1; i <= nplayers; i++) {
+		for (var j = 0; j < 10; j++) {
+			funding[j] += chosenAllos["player"+i][j];
+		}
+	}
+	return funding
+}
+
 function endGame() {
-	$("#allotest").html(chosenAllos);
+	$("#allotest").html(JSON.stringify(chosenAllos));
 	$("#playwindow").hide();
 	$("#waitingwindow").hide();
 	$("#resultswindow").show();
+	var funding = getProjectFunding();
+	for (var i = 1; i <= 10; i++) {
+		$("#f"+i).html(funding[i-1]);
+		if (funding[i-1] >= 100) {
+			$("#f"+i).addClass("table-success");
+		}
+	}
+	for (var i = 1; i <= nplayers; i++) {
+		var row = "<tr>";
+		var cs = chosenAllos["player"+i];
+		for (var j = 0; j < cs.length; j++) {
+			row += "<td>"+cs[j]+"</td>";
+		}
+		row += "</tr>";
+		$("#rbody").append(row);
+	}
+	
 }
 
 function updateFunds() {
