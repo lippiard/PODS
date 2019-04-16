@@ -14,6 +14,7 @@
   var evaced = 0;
   var numplayers;
   var evacTimes = [];
+  var score;
   
   jQuery(document).ready(function($) {
 	$("#nav-placeholder").load("nav.ejs", function() {
@@ -21,7 +22,7 @@
 	});
 	
     warningLevel = 1;
-    days = 1;
+    days = 5;
     hours = 0;
     progress = 0;
     maxProgress = days * 24;
@@ -59,6 +60,7 @@
       if (hours < 0) {
         hours = 23;
         days = days - 1;
+        score += 1;
       }
       $("#timeleft").html("Days: "+days+", Hours: "+hours);
       updateProgBar();
@@ -123,6 +125,5 @@
       $("#choice").html("You evacuated with "+evacAt.days+" days and "+evacAt.hours+" hours remaining.");
     }
     
-    //debug
-    console.log(evacTimes);
+
   }
