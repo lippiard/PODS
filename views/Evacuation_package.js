@@ -141,7 +141,8 @@
     } else {
       $("#choice").html("You evacuated with "+evacAt.days+" days and "+evacAt.hours+" hours remaining.");
     }
-    $("#choice").html("Your score is: "+score);
+    $("#score").html("Your score is: "+score);
+    $("#others").html(evacDays[evacAt.days] - 1 + " other(s) chose to evacuate at the same time as you");
     
 
   }
