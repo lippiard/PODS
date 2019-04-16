@@ -22,6 +22,8 @@ jQuery(document).ready(function($) {
     $("#resultswindow").hide();
     $("#waitingwindow").hide();
     
+    socket.emit('find game room', {sid:sid, gametype: gametype});
+    
     funds = maxfunds;
     updateFunds();
     
@@ -38,19 +40,17 @@ jQuery(document).ready(function($) {
     }
     
     //for testing below
-    role = 'player1';
-    fillPayoffTable();
-    $("#matchingwindow").hide();
-    $("#playwindow").show();
+//    role = 'player1';
+//    fillPayoffTable();
+//    $("#matchingwindow").hide();
+//    $("#playwindow").show();
 });
 
 socket.on('start game', function(data) {
-	
-	role = 'player1';
-	
-	$.getJSON("ecf_payoffs.json", function(payoffs) {
-		fillPayoffTable(payoffs);
-	});
+	role = data.role;
+	fillPayoffTable();
+	$("#matchingwindow").hide();
+	$("#playwindow").show();
 });
 
 function submitAllocation() {

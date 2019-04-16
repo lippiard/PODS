@@ -86,12 +86,18 @@ var pairSockets = function(socket, sid) {
 };
 
 
-//for now just pairs
 var numPerEvac = 2;
+var numPerECF = 2; //max 5
 
-var groupSockets = function(socket, sid) {
+var groupSockets = function(socket, sid, game) {
+	var n;
+	if (game === 'Evacuation') {
+		n = numPerEvac;
+	} else if (game === 'EnterpriseCrowdFunding') {
+		n = numPerECF;
+	}
 	var waiting = [];
-	for (var i = 0; i < numPerEvac - 1; i++) {
+	for (var i = 0; i < n - 1; i++) {
 		var waitingOne = queue.find(function(el) {
 			if (el.sessionID === sid) {
 				return el;
@@ -102,7 +108,7 @@ var groupSockets = function(socket, sid) {
 		}
 		queue = queue.filter(item => !((item.socket.id === waitingOne.socket.id) && (sid === item.sessionID)));
 	}
-	if (waiting.length == numPerEvac - 1) {
+	if (waiting.length == n - 1) {
 		var room = sid+'#'+socket.id;
 		//remove waiting from queue
 		for (var i = 0; i < waiting.length; i++) {
@@ -110,15 +116,25 @@ var groupSockets = function(socket, sid) {
 		  sid += '#'+waiting[i].socket.id;
 		}
 		
-		var role1 = "Timer";
-		var role2;
+		var roles = [];
+		if (game === 'Evacuation') {
+			roles.push("Timer");
+			for (var i = 0; i < waiting.length; i++) {
+				roles.push(null);
+			}
+		} else if (game === "EnterpriseCrowdFunding") {
+			for (var i = 0; i < n; i++) {
+				var r  = i + 1;
+				roles.push("player"+r);
+			}
+		}
 		
 		socket.join(room);
-		socket.emit('start game', {room: room, role: role1, numplayers: numPerEvac});
+		socket.emit('start game', {room: room, role: roles[0], numplayers: n});
 		
 		for (var i = 0; i < waiting.length; i++) {
 			waiting[i].socket.join(room);
-			waiting[i].socket.emit('start game', {room: room, role: role2, numplayers: numPerEvac});
+			waiting[i].socket.emit('start game', {room: room, role: roles[i+1], numplayers: n});
 		}
 	
 	} else {
@@ -154,9 +170,9 @@ io.on('connection', function(socket) {
 	socket.on('find game room', function(data) {
 		if (data.gametype === "HideAndSeek") {
 			pairSockets(socket, data.sid);
-		} else if (data.gametype === "Evacuation") {
-			groupSockets(socket, data.sid);
-		}
+		} else if (data.gametype === "Evacuation" || data.gametype === "EnterpriseCrowdFunding") {
+			groupSockets(socket, data.sid, data.gametype);
+		} 
 	});
 	
 	socket.on('made choice', function(data) {
