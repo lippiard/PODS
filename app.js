@@ -201,6 +201,9 @@ io.on('connection', function(socket) {
 		socket.to(data.room).emit('increment evaced', data);
 	});
 	
+	socket.on('chose allo', function(data) {
+		socket.to(data.room).emit('allo chosen', data);
+	})
 });
 
 var port = 8080; //use for running on local machine
