@@ -13,6 +13,8 @@
   var storm = false;
   var evaced = 0;
   var numplayers;
+  var evacTimes = [];
+  var score;
   
   jQuery(document).ready(function($) {
 	$("#nav-placeholder").load("nav.ejs", function() {
@@ -20,7 +22,7 @@
 	});
 	
     warningLevel = 1;
-    days = 1;
+    days = 5;
     hours = 0;
     progress = 0;
     maxProgress = days * 24;
@@ -58,6 +60,7 @@
       if (hours < 0) {
         hours = 23;
         days = days - 1;
+        score += 1;
       }
       $("#timeleft").html("Days: "+days+", Hours: "+hours);
       updateProgBar();
@@ -76,6 +79,7 @@
   
   socket.on('increment evaced', function(data) {
 	  evaced++;
+	  evacTimes.push(data.evacAt)
 	  $("#numevac").html(evaced);
   });
   
@@ -98,7 +102,8 @@
     evacAt = {days: days, hours: hours, warningLevel: warningLevel};
     $("#playwindow").hide();
     $("#waitingwindow").show();
-    socket.emit('evaced', {room: gameroom});
+    evacTimes.push(evacAt);
+    socket.emit('evaced', {room: gameroom, evacAt: evacAt});
   }
   
   function endGame() {
@@ -119,4 +124,6 @@
     } else {
       $("#choice").html("You evacuated with "+evacAt.days+" days and "+evacAt.hours+" hours remaining.");
     }
+    
+
   }
