@@ -2,6 +2,8 @@ var gametype = 'EnterpriseCrowdFunding';
 var gameroom;
 var role;
 var socket = io();
+var funds = 0;
+var maxfunds = 80;
 
 jQuery(document).ready(function($) {
 	$("#nav-placeholder").load("nav.ejs", function() {
@@ -15,12 +17,24 @@ jQuery(document).ready(function($) {
       });
     });
     
+    funds = maxfunds;
+    updateFunds();
+    
+    for (var i = 1; i <= 10; i++) {
+	    $("#a"+i).bind('keyup mouseup', function() {
+	    	$(this).val((Number($(this).val())));
+	    	if ($(this).val() < 0) {
+	    		$(this).val(0);
+	    	} else if ($(this).val() > Number($(this).attr('max'))) {
+	    		$(this).val(Number($(this).attr('max')));
+	    	}
+	    	updateFunds();
+	    });
+    }
+    
     //for testing below
     role = 'player1';
-    $.getJSON("ecf_payoffs.json", function(payoffs) {
-    	console.log(payoffs);
-		fillPayoffTable(payoffs);
-	});
+    fillPayoffTable();
 });
 
 socket.on('start game', function(data) {
@@ -32,9 +46,17 @@ socket.on('start game', function(data) {
 	});
 });
 
-function fillPayoffTable(payoffs) {
+function updateFunds() {
+	funds = maxfunds;
+	for (var i = 1; i <= 10; i++) {
+		funds = funds - $("#a"+i).val();	
+	}
+	$("#funds").html(funds);
+}
+
+function fillPayoffTable() {
 	for (var i = 1; i <= 10; i++) {
 		$("#p"+i).html(payoffs[role][i-1]);
-		$("#m"+1).html(payoffs.median[i-1]);
+		$("#m"+i).html(payoffs.median[i-1]);
 	}
 }
