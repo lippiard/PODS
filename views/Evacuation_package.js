@@ -14,6 +14,7 @@
   var numplayers;
   var evacTimes = [];
   var score = 0;
+  var evacDays = [0,0,0,0,0];
   
   jQuery(document).ready(function($) {
 	$("#nav-placeholder").load("nav.ejs", function() {
@@ -70,6 +71,10 @@
         endGame();
       }
       
+	  if(evaced == numplayers) {
+		  endGame();
+	  }
+      
       //updateWarningLevel();
       if (role === "Timer") {
         socket.emit('evac tick', {room: gameroom, warningLevel: warningLevel});
@@ -82,6 +87,7 @@
 	  evaced++;
 	  evacTimes.push(data.evacAt)
 	  $("#numevac").html(evaced);
+
   });
   
   function updateProgBar() {
@@ -101,6 +107,7 @@
   
   function evacuate() {
     evacAt = {days: days, hours: hours, warningLevel: warningLevel};
+    evaced += 1;
     $("#playwindow").hide();
     $("#waitingwindow").show();
     evacTimes.push(evacAt);
@@ -112,7 +119,6 @@
 	if (!evacAt && warningLevel == 5) {
 		score = 0;
 	}   
-	console.log(score);
     clearInterval(timer);
     $("#playwindow").hide();
     $("#waitingwindow").hide();
@@ -124,11 +130,18 @@
       $("#stormstatus").html("The storm has passed over.");
     }
     
+    evacTimes.forEach( function(time) {
+    	evacDays[time.days] += 1;
+    });
+
+    score = score * (1-(evacDays[evacAt.days]-1)/numplayers);
+    
     if (!evacAt) {
       $("#choice").html("You chose not to evacuate.");
     } else {
       $("#choice").html("You evacuated with "+evacAt.days+" days and "+evacAt.hours+" hours remaining.");
     }
+    $("#choice").html("Your score is: "+score);
     
 
   }
