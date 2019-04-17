@@ -133,7 +133,7 @@ function endGame() {
 			payoffArray.push(finalPayoffs["player"+i]);
 		}
 		result.push(payoffArray);
-		$.post('/postchoices', {choices: result, sid: sid, gametype: gametype});
+		//$.post('/postchoices', {choices: result, sid: sid, gametype: gametype}); //check this later - array format fails for some reason going into db
 	}
 }
 

@@ -86,8 +86,8 @@ var pairSockets = function(socket, sid) {
 };
 
 
-var numPerEvac = 2;
-var numPerECF = 2; //max 5
+var numPerEvac = 4;
+var numPerECF = 5; //max 5
 
 var groupSockets = function(socket, sid, game) {
 	var n;
@@ -206,8 +206,8 @@ io.on('connection', function(socket) {
 	})
 });
 
-var port = 8080; //use for running on local machine
-//var port = 5000; // use for running through http online
+//var port = 8080; //use for running on local machine
+var port = 5000; // use for running through http online
 
 http.listen(port, function() {
 	console.log('listening on port '+port);
