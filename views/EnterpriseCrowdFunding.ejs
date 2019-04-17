@@ -103,11 +103,11 @@
 		</div>
 		<div id="resultswindow">
 		  <div class="row">
-		    <h2>You chose the allocation: <span id="allotest"></span></h2>
+		    <h2>You are Player <span id="playernum"></span>.</h2>
 		  </div>
 		  <div class="row">
 			  <table class="table">
-			  	  <caption>100 thalers are required to fund a project. Projects in green reach that threshold.</caption>
+			  	  <caption>100 thalers are required to fund a project. Projects in green reached that threshold.</caption>
 				  <thead>
 				    <tr>
 				      <th scope="col">Project:</th>
@@ -123,8 +123,8 @@
 				      <th scope="col">10</th>
 				    </tr>
 				  </thead>
-				  <tbody id="rbody">
-				    <tr>
+				  <tbody>
+				    <tr id="totalsrow">
 				      <th scope="row">Total Funding:</th>
 				      <td id="f1"></td>
 				      <td id="f2"></td>
@@ -139,6 +139,19 @@
 				    </tr>
 				   </tbody>
 		      </table>
+	      </div>
+	      <div class="row">
+	        <table class="table">
+	          <caption>Payoffs are calculated by summing each player's payoffs for the funded projects. The winning player is shown in blue.</caption>
+	          <thead>
+	            <tr>
+	              <th scope="col">Player:</th>
+	              <th scope="col">Payoff:</th>
+	            </tr>
+	          </thead>
+	          <tbody id="pbody">
+	          </tbody>
+	        </table>
 	      </div>
 		</div>
 	</div>

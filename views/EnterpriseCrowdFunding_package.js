@@ -55,6 +55,7 @@ socket.on('start game', function(data) {
 	fillPayoffTable();
 	$("#matchingwindow").hide();
 	$("#playwindow").show();
+	$("#playernum").html(role[role.length - 1]);
 });
 
 function submitAllocation() {
@@ -89,10 +90,20 @@ function getProjectFunding() {
 }
 
 function endGame() {
-	$("#allotest").html(JSON.stringify(chosenAllos));
 	$("#playwindow").hide();
 	$("#waitingwindow").hide();
 	$("#resultswindow").show();
+	
+	for (var i = 1; i <= nplayers; i++) {
+		var row = '<tr><th scope="row">Player '+i+'</th>';
+		var cs = chosenAllos["player"+i];
+		for (var j = 0; j < cs.length; j++) {
+			row += "<td>"+cs[j]+"</td>";
+		}
+		row += "</tr>";
+		$("#totalsrow").before(row);
+	}
+	
 	var funding = getProjectFunding();
 	for (var i = 1; i <= 10; i++) {
 		$("#f"+i).html(funding[i-1]);
@@ -100,16 +111,34 @@ function endGame() {
 			$("#f"+i).addClass("table-success");
 		}
 	}
+	
+	var finalPayoffs = calculatePayoffs(funding);
 	for (var i = 1; i <= nplayers; i++) {
-		var row = "<tr>";
-		var cs = chosenAllos["player"+i];
-		for (var j = 0; j < cs.length; j++) {
-			row += "<td>"+cs[j]+"</td>";
+		var winner = "";
+		if (finalPayoffs["player"+i] == finalPayoffs.max) {
+			winner = ' class="table-primary"';
 		}
-		row += "</tr>";
-		$("#rbody").append(row);
+		var row = '<tr'+winner+'><th scope="row">Player '+i+'</th><td>'+finalPayoffs["player"+i]+'</td>';
+		$("#pbody").append(row);
+	}
+}
+
+function calculatePayoffs(funding) {
+	var finalPayoffs = {max: 0};
+	
+	for (var i = 1; i <= nplayers; i++) {
+		finalPayoffs["player"+i] = 0;
+		for (var j = 0; j < 10; j++) {
+			if (funding[j] >= 100) {
+				finalPayoffs["player"+i] += payoffs["player"+i][j];
+			}
+		}
+		if (finalPayoffs["player"+i] > finalPayoffs.max) {
+			finalPayoffs.max = finalPayoffs["player"+i];
+		}
 	}
 	
+	return finalPayoffs;
 }
 
 function updateFunds() {
