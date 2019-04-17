@@ -87,7 +87,7 @@ var pairSockets = function(socket, sid) {
 
 
 var numPerEvac = 2;
-var numPerECF = 4; //max 5
+var numPerECF = 2; //max 5
 
 var groupSockets = function(socket, sid, game) {
 	var n;
