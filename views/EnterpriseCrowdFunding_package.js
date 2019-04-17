@@ -121,6 +121,20 @@ function endGame() {
 		var row = '<tr'+winner+'><th scope="row">Player '+i+'</th><td>'+finalPayoffs["player"+i]+'</td>';
 		$("#pbody").append(row);
 	}
+	
+	//send results to db
+	//don't want to double count, so only player1 will send
+	//takes the format: rows of allocations for each player, then row of final allocations
+	if (role === "player1") {
+		var result = [];
+		var payoffArray = [];
+		for (var i = 1; i <= nplayers; i++) {
+			result.push(chosenAllos["player"+i]);
+			payoffArray.push(finalPayoffs["player"+i]);
+		}
+		result.push(payoffArray);
+		$.post('/postchoices', {choices: result, sid: sid, gametype: gametype});
+	}
 }
 
 function calculatePayoffs(funding) {
