@@ -26,19 +26,14 @@ app.use(session({
 }));
 
 
-//app.get('/', routes.get_main);
 app.get('/', routes.get_home);
 app.get('/test', routes.get_test);
-//app.post('/processchoice', routes.process_choice);
 app.get('/results', routes.get_results);
 app.get('/login', routes.get_login);
 app.post('/checklogin', routes.post_check_login);
 app.get('/profile', routes.get_profile);
 app.get('/create', routes.get_create);
 app.get('/pod', routes.get_pod);
-//app.get('/getsessions', routes.get_sessions);
-//app.get('/main', routes.get_main);
-app.post('/postchoice', routes.post_choice);
 app.get('/data', routes.get_data);
 app.post('/createsession', routes.post_create_session);
 app.get('/signup', routes.get_signup);
@@ -50,6 +45,13 @@ app.post('/fetchresults', routes.post_fetch_results);
 app.post('/leavesession', routes.post_leave_session);
 app.post('/fetchsessiondetails', routes.post_fetch_session_details);
 app.post('/passcheck', routes.check_password);
+
+//these probably aren't needed, but haven't tested - comment out as tested
+//app.get('/', routes.get_main);
+//app.post('/processchoice', routes.process_choice);
+//app.get('/getsessions', routes.get_sessions);
+//app.get('/main', routes.get_main);
+//app.post('/postchoice', routes.post_choice);
 
 var queue = []; //list of sockets waiting to be matched
 
@@ -127,11 +129,9 @@ var groupSockets = function(socket, sid, game) {
 				var r  = i + 1;
 				roles.push("player"+r);
 			}
-		}
-		
+		}		
 		socket.join(room);
-		socket.emit('start game', {room: room, role: roles[0], numplayers: n});
-		
+		socket.emit('start game', {room: room, role: roles[0], numplayers: n});		
 		for (var i = 0; i < waiting.length; i++) {
 			waiting[i].socket.join(room);
 			waiting[i].socket.emit('start game', {room: room, role: roles[i+1], numplayers: n});
